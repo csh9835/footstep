@@ -9,13 +9,16 @@
     <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
 </head>
 <body>
-{% include 'navbar.html' %}
-    <div class="container">
+    {% include 'navbar.html' %}
     <!-- 기본 템플릿 내용 -->
     {% block content %}
     {% endblock %}
     <!-- 기본 템플릿 내용 끝 -->
-    </div>
 <script src="{% static 'bootstrap.min.js' %}"></script> <!-- 부트스트랩 JS -->
+
+<!-- JS -->
+{% block script %}
+{% endblock %}
+<!-- JS 끝 -->
 </body>
 </html>

@@ -21,5 +21,6 @@ from footstep import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('footstep/', include('footstep.urls')),
-    path('', views.index, name='index')
+    path('', views.index, name='index'),
+    path('common/', include('common.urls')),
 ]
