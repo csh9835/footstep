@@ -1,4 +1,12 @@
-{% extends 'base.html' %}
-{% block content %}
-<h1>메인</h1>
+{% extends 'base/main_base.html' %}
+{% block main_content %}
+{% if test %}
+<ul>
+    {% for x in test %}
+    <li><a href="/main/{{ x.author.username }}/">{{ x.subject }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>질문이 없습니다.</p>
+{% endif %}
 {% endblock %}

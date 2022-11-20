@@ -6,4 +6,5 @@ app_name = 'footstep'
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('personal/', views.personal, name='personal'),
 ]
