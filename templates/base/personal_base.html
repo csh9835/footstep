@@ -1,0 +1,25 @@
+{% extends 'base/main_base.html' %}
+{% block tog %} <!-- 토글 -->
+<button class="navbar-toggler d-md-none collapsed" 
+        type="button" 
+        data-bs-toggle="collapse" 
+        data-bs-target="#sidebarMenu" 
+        aria-controls="sidebarMenu" 
+        aria-expanded="false" 
+        aria-label="Toggle navigation"
+        >
+    <span class="navbar-toggler-icon"></span>
+</button>
+{% endblock %}
+
+{% block main_content %}
+<div class="row">
+    {% include 'sidebar.html' %} <!-- 사이드 바 -->
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 vh-100">
+        {% block personal_content %}
+        <!-- 개인 컨텐츠 -->
+        {% endblock %}
+    </main>
+</div>
+{% endblock %}

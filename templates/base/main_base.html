@@ -1,0 +1,16 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand  me-0 px-3 justify-content-start" href="/footstep/">Footstep</a>       
+    {% block tog %}
+    <!-- 토글 상속 블럭 -->
+    {% endblock %}
+    {% include 'navitem.html' %} <!-- 네비 아이템 -->
+</header>
+  
+<div class="container-fluid">
+    {% block main_content %}
+    <!-- 메인컨텐츠 or 개인컨텐츠 상속 블럭 -->
+    {% endblock %}
+</div>
+{% endblock %}

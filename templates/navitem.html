@@ -1,0 +1,19 @@
+<!-- 네비 아이템 -->
+<div class="navbar-nav w-100">
+    <div class="nav-item">
+        <div class="btn-group">
+            {% if user.is_authenticated %} <!-- 1 -->
+            <a class="nav-link btn btn-dark px-3" href="{% url 'common:logout' %}">로그아웃</a>
+            {% if user.is_superuser %} <!-- 2  -->
+            <a class="nav-link btn btn-dark px-3" href="/admin">관리자 ({{ user.username }})</a>
+            {% else %} <!-- 2 -->
+            <a class="nav-link btn btn-dark px-3" href="#">내정보 ({{ user.username }})</a>
+            <a class="nav-link btn btn-dark px-3" href="{% url 'footstep:personal' %}">내서재</a>
+            {% endif %} <!-- 2 -->
+            {% else %} <!-- 1 -->
+            <a class="nav-link btn btn-dark px-3" href="{% url 'common:login' %}">로그인</a>               
+            <a class="nav-link btn btn-dark px-3" href="{% url 'common:signup' %}">회원가입</a>
+            {% endif %} <!-- 1 -->
+        </div>
+    </div>
+</div>
