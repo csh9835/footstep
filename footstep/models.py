@@ -7,6 +7,9 @@ class Post(models.Model):
     create_date = models.DateTimeField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.subject
+
 class Category(models.Model):
     category_sub = models.CharField(max_length=200)
     posts = models.ForeignKey(Post, on_delete=models.DO_NOTHING)

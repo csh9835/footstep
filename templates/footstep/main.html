@@ -3,10 +3,10 @@
 {% if test %}
 <ul>
     {% for x in test %}
-    <li><a href="/main/{{ x.author.username }}/">{{ x.subject }}</a></li>
+    <li><a href="{% url 'footstep:personal' x.author %}">{{ x.subject }}</a></li>
     {% endfor %}
 </ul>
 {% else %}
-<p>질문이 없습니다.</p>
+<p>게시물이 없습니다.</p>
 {% endif %}
 {% endblock %}
