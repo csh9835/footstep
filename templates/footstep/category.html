@@ -2,9 +2,10 @@
 
 {% block personal_content %}
 
-    {% if posts %}
-        {% for post in posts %}
-        <p>{{ post }}</p>
+    {% if category %}
+        <h1>{{ category.category_sub }}</h1>
+        {% for post in category.post_set.all %}
+            {{ post }}
         {% endfor %}
     {% else %}
     <h2>게시글이 없습니다.</h2>
