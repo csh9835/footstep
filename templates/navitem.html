@@ -6,11 +6,10 @@
             <a class="nav-link btn btn-dark px-3" href="{% url 'common:logout' %}">로그아웃</a>
             {% if user.is_superuser %} <!-- 2  -->
             <a class="nav-link btn btn-dark px-3" href="/admin">관리자페이지 ({{ user.username }})</a>
-            <a class="nav-link btn btn-dark px-3" href="{% url 'footstep:personal' user.username %}">관리자 서재</a>
             {% else %} <!-- 2 -->
             <a class="nav-link btn btn-dark px-3" href="#">내정보 ({{ user.username }})</a>
-            <a class="nav-link btn btn-dark px-3" href="{% url 'footstep:personal' user.username %}">내 서재</a>
             {% endif %} <!-- 2 -->
+            <a class="nav-link btn btn-dark px-3" href="{% url 'footstep:personal' user.username %}">서재</a>
             {% else %} <!-- 1 -->
             <a class="nav-link btn btn-dark px-3" href="{% url 'common:login' %}">로그인</a>               
             <a class="nav-link btn btn-dark px-3" href="{% url 'common:signup' %}">회원가입</a>
