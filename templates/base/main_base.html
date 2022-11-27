@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% block content %}
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand  me-0 px-3 justify-content-start" href="/footstep/">Footstep</a>       
+    <a class="navbar-brand  me-0 px-3 justify-content-start" href="{% url 'footstep:index' %}">Footstep</a>       
     {% block tog %}
     <!-- 토글 상속 블럭 -->
     {% endblock %}
