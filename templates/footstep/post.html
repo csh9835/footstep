@@ -1,0 +1,13 @@
+{% extends 'base/personal_base.html' %}
+{% block personal_content %}
+
+{% if post %}
+<h1 class="border-bottom p-2">{{ post.subject }}</h1>
+{{ post.content }}
+<br><hr>
+<p>작성자: {{ post.author.username }}</p>
+<p>작성일시: {{ post.create_date }}</p>
+<p>카테고리: {{ post.category.category_sub }}</p>
+{% endif %}
+    
+{% endblock %}

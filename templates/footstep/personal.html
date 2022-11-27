@@ -1,10 +1,11 @@
 {% extends 'base/personal_base.html' %}
-
 {% block personal_content %}
 
     {% if posts %}
         {% for post in posts %}
-        <p>{{ post }}</p>
+        <li>
+            <a class="text-dark" href="{% url 'footstep:post' owner.username post.subject %}">{{ post }}</a>
+        </li>
         {% endfor %}
     {% else %}
     <h2>게시글이 없습니다.</h2>
