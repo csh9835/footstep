@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .form import UserForm
+from django.contrib.auth.models import User
+from .models import Profile
 
 def signup(request):
     if request.method == 'POST':
@@ -15,3 +17,6 @@ def signup(request):
     else:
         form = UserForm()
     return render(request, 'common/signup.html', {'form':form})
+
+def profile(request):
+    return render(request, 'common/profile.html')
