@@ -1,0 +1,12 @@
+{% extends 'base/main_base.html' %}
+{% block main_content %}
+{% if allposts %}
+<ul>
+    {% for post in allposts %}
+    <li><a href="{% url 'footstep:personal' post.author %}">{{ post.subject }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>게시글이 없습니다.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'base/main_base.html' %}
+{% block main_content %}
+<h2 class="border-bottom p-3">내정보</h2>
+<p>{{ user.username }}</p>
+<p>{{ user.profile.nickname }}</p>
+<p>{{ user.email }}</p>
+<p>{{ user.profile.blogname }}</p>
+
+{% endblock %}

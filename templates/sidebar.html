@@ -1,0 +1,30 @@
+<!-- 사이드 바 -->
+<nav id="sidebarMenu" class="col-md-4 col-lg-3 d-md-block bg-secondary collapse">
+    <div class="position-sticky pt-3 navbar-nav-scroll" style="--bs-scroll-height: 90vh;" >
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'footstep:personal' owner.username %}">
+                    <h3 class="text-center text-break">블로그 명</h3>
+                </a>
+            </li>
+            <li class="text-center nav-item">
+                <span class="nav-link text-white">닉네임</span>
+            </li>
+            <li class="text-center nav-item">
+                <span class="nav-link text-white">{{ owner.email }}</span>
+            </li>
+            <br>
+            <li>
+            {% if owner.sidebarcontent_set.all %}
+                {% for i in owner.sidebarcontent_set.all %}
+                <a class="nav-link text-white" href="{% url 'footstep:category' owner.username i.category_sub %}">
+                {{ i }}
+                </a>
+                {% endfor %}
+            {% else %}
+                <span class="nav-link text-white">카테고리가 없습니다</span>
+            {% endif %}
+            </li>
+        </ul>
+    </div>
+</nav>

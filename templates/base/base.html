@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+        <style>
+            html,
+            body {
+                width: auto;
+                height: auto;
+            }
+        </style>
+    </head>
+    <body>
+        {% block content %}
+        <!-- 기본 템플릿 내용 -->
+        {% endblock %}
+
+        <!-- JS -->
+        <script src="{% static 'bootstrap.min.js' %}"></script> <!-- 부트스트랩 JS -->
+        {% block script %}
+        {% endblock %}
+        <!-- JS -->
+    </body>
+</html>
