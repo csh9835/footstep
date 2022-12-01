@@ -1,5 +1,7 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Post, User
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
+from .models import Post, User, SidebarContent
+from .forms import PostForm
 
 def index(request):
     allposts = Post.objects.order_by('-create_date')
@@ -23,3 +25,24 @@ def post(request, username, subject):
     post = get_object_or_404(owner.post_set, subject=subject)
     context = {'owner':owner, 'post':post}
     return render(request, 'footstep/post.html', context)
+
+def post_create(request, username):
+    owner = get_object_or_404(User, username=username)
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = Post()
+            post.subject = form.cleaned_data['subject']
+            post.content = form.cleaned_data['content']
+            post.author = owner
+            try: #기존 카테고리 이름이 있으면
+                post.category = owner.sidebarcontent_set.get(category_sub=form.cleaned_data['category'])
+            except: #없다면 생성
+                post.category = owner.sidebarcontent_set.create(category_sub=form.cleaned_data['category'])
+            post.create_date = timezone.now()
+            post.save()
+            return redirect('footstep:personal', username = username)
+    else:
+        form = PostForm()
+    context = {'owner':owner, 'form':form}
+    return render(request, 'footstep/post_create.html', context)
