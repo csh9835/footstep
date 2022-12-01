@@ -4,21 +4,34 @@
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a class="nav-link text-white" href="{% url 'footstep:personal' owner.username %}">
-                    <h3 class="text-center text-break">블로그 명</h3>
+                    <h3 class="text-center text-break">
+                        {% if owner.profile.blogname %}
+                        {{ owner.profile.blogname }}
+                        {% else %}
+                        {{ owner.username }}의 블로그
+                        {% endif %}
+                    </h3>
                 </a>
             </li>
-            <li class="text-center nav-item">
-                <span class="nav-link text-white">닉네임</span>
+            <li class="nav-item m-1 p-1">
+                <div class="nav-item text-white">
+                    {% if owner.profile.nickname %}
+                    {{ owner.profile.nickname }}
+                    {% else %}
+                    {{ owner.username }}
+                    {% endif %}
+                </div>
+                <div class="nav-item text-white">{{ owner.email }}</div>
             </li>
-            <li class="text-center nav-item">
-                <span class="nav-link text-white">{{ owner.email }}</span>
-            </li>
-            <br>
+            {% if owner.username == user.username %}
+            <a class="btn btn-primary mx-1" href="{% url 'footstep:post_create' user.username %}">글쓰기</a>
+            {% endif %}
+            <hr class="text-white">
             <li>
             {% if owner.sidebarcontent_set.all %}
                 {% for i in owner.sidebarcontent_set.all %}
                 <a class="nav-link text-white" href="{% url 'footstep:category' owner.username i.category_sub %}">
-                {{ i }}
+                    {{ i }} ({{ i.post_set.count }})
                 </a>
                 {% endfor %}
             {% else %}
