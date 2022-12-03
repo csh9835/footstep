@@ -1,13 +1,24 @@
 {% extends 'base/personal_base.html' %}
 {% block personal_content %}
 
-{% if post %}
-<h1 class="border-bottom p-2">{{ post.subject }}</h1>
+<h1 class="p-2">
+    {{ post.subject }}
+    {% if owner.username == user.username %}
+    <span>
+        <a class="btn btn-sm btn-primary" href="{% url 'footstep:post_modify' owner.username post.subject %}">수정</a>
+    </span>
+    {% endif %}
+</h1>
+<hr>
 {{ post.content }}
-<br><hr>
+<hr>
 <p>작성자: {{ post.author.username }}</p>
 <p>작성일시: {{ post.create_date }}</p>
 <p>카테고리: {{ post.category.category_sub }}</p>
+{% if post.modify_date %}
+{{ post.modify_date }}
 {% endif %}
+<hr>
+
     
 {% endblock %}
