@@ -3,9 +3,9 @@
 
     {% if posts %}
         {% for post in posts %}
-        <li>
+        <div>
             <a class="text-dark" href="{% url 'footstep:post' owner.username post.subject %}">{{ post }}</a>
-        </li>
+        </div>
         {% endfor %}
     {% else %}
     <h2>게시글이 없습니다.</h2>
