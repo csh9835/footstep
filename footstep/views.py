@@ -3,8 +3,8 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from .models import Post, User, SidebarContent
-from .forms import PostForm
+from .models import Post, User
+from .forms import PostForm, CommentForm
 
 
 def index(request):
@@ -30,6 +30,8 @@ def category(request, username, category_sub):
 def post(request, username, subject):
     owner = get_object_or_404(User, username=username)
     post = get_object_or_404(owner.post_set, subject=subject)
+    if request.method == 'POST':
+        return comment_create(request, username, subject)
     context = {'owner':owner, 'post':post}
     return render(request, 'footstep/post.html', context)
 
@@ -99,3 +101,39 @@ def post_delete(request, username, subject):
         return redirect('footstep:personal', username=username)
     post.delete()
     return redirect('footstep:personal', username=username)
+
+
+@login_required(login_url='common:login')
+def comment_create(request, username, subject):
+    owner = get_object_or_404(User, username=username)
+    post = get_object_or_404(owner.post_set, subject=subject)
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.create_date = timezone.now()
+        comment.author = request.user
+        comment.post = post
+        comment.save()
+        return redirect('footstep:post', username=username, subject=subject)
+    else:
+        context = {'owner':owner, 'post':post, 'form':form}
+        return render(request, 'footstep/post.html', context)
+
+
+#@login_required(login_url='common:login')
+#def comment_create(request, username, subject):
+#    owner = get_object_or_404(User, username=username)
+#    post = get_object_or_404(owner.post_set, subject=subject)
+#    if request.method == 'POST':
+#        form = CommentForm(request.POST)
+#        if form.is_valid():
+#            comment = form.save(commit=False)
+#            comment.create_date = timezone.now()
+#            comment.author = request.user
+#            comment.post = post
+#            comment.save()
+#            return redirect('footstep:post', username=username, subject=subject)
+#    else:
+#        form = CommentForm()
+#    context = {'owner':owner, 'post':post, 'form':form}
+#    return render(request, 'footstep/post.html', context)

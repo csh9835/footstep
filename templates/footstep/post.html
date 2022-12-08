@@ -17,14 +17,35 @@
 {{ post.content }}
 <hr>
 <p>작성자: {{ post.author.username }}</p>
-<p>작성일시: {{ post.create_date }}</p>
+<p>작성: {{ post.create_date }}</p>
 <p>카테고리: {{ post.category.category_sub }}</p>
 {% if post.modify_date %}
-{{ post.modify_date }}
+<p>수정: {{ post.modify_date }}</p>
 {% endif %}
 <hr>
+<h4>댓글</h4>
+{% include 'footstep/comment_form.html' %} <!-- 댓글 폼 -->
+{% if post.comment_set.all %}
+    {% for comment in post.comment_set.all %}
+    <li>
+        {{ comment.content }}
+        <!-- 버튼(임시)
+        <span>
+            <a class="btn btn-sm btn-primary" href="#">수정</a>
+        </span>
+        <span>
+            <a href="javascript:void(0)" class="delete btn btn-sm btn-primary"
+               data-uri="#">삭제</a>
+        </span>
+        -->
+    </li>
+    {% endfor %}
+{% else %}
+    <span>댓글이 없습니다.</span>
+{% endif %}
 
 {% endblock %}
+
 
 {% block script %}
 <script type='text/javascript'>

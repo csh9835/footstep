@@ -1,0 +1,10 @@
+<!-- 댓글 폼 -->
+
+<form action="{% url 'footstep:post' owner.username post.subject %}" method="post" class="my-3">
+    {% csrf_token %}
+    {% include 'form_errors.html' %}
+    <div class="mb-3">
+        <textarea name="content" id="content" class="form-control" rows="10"></textarea>
+        <input type="submit" value="댓글달기" class="btn btn-primary">
+    </div>
+</form>
