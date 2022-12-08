@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from .models import Post, User
+from .models import User, Post, Comment
 from .forms import PostForm, CommentForm
 
 
@@ -30,8 +30,6 @@ def category(request, username, category_sub):
 def post(request, username, subject):
     owner = get_object_or_404(User, username=username)
     post = get_object_or_404(owner.post_set, subject=subject)
-    if request.method == 'POST':
-        return comment_create(request, username, subject)
     context = {'owner':owner, 'post':post}
     return render(request, 'footstep/post.html', context)
 
@@ -107,33 +105,47 @@ def post_delete(request, username, subject):
 def comment_create(request, username, subject):
     owner = get_object_or_404(User, username=username)
     post = get_object_or_404(owner.post_set, subject=subject)
-    form = CommentForm(request.POST)
-    if form.is_valid():
-        comment = form.save(commit=False)
-        comment.create_date = timezone.now()
-        comment.author = request.user
-        comment.post = post
-        comment.save()
-        return redirect('footstep:post', username=username, subject=subject)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.create_date = timezone.now()
+            comment.author = request.user
+            comment.post = post
+            comment.save()
+            return redirect('footstep:post', username=username, subject=subject)
     else:
-        context = {'owner':owner, 'post':post, 'form':form}
-        return render(request, 'footstep/post.html', context)
+        form = CommentForm()
+    context = {'owner':owner, 'post':post, 'form':form}
+    return render(request, 'footstep/comment_form.html', context)
 
 
-#@login_required(login_url='common:login')
-#def comment_create(request, username, subject):
-#    owner = get_object_or_404(User, username=username)
-#    post = get_object_or_404(owner.post_set, subject=subject)
-#    if request.method == 'POST':
-#        form = CommentForm(request.POST)
-#        if form.is_valid():
-#            comment = form.save(commit=False)
-#            comment.create_date = timezone.now()
-#            comment.author = request.user
-#            comment.post = post
-#            comment.save()
-#            return redirect('footstep:post', username=username, subject=subject)
-#    else:
-#        form = CommentForm()
-#    context = {'owner':owner, 'post':post, 'form':form}
-#    return render(request, 'footstep/post.html', context)
+@login_required(login_url='common:login')
+def comment_modify(request, username, subject, comment_id):
+    owner = get_object_or_404(User, username=username)
+    post = get_object_or_404(owner.post_set, subject=subject)
+    comment = get_object_or_404(Comment, pk=comment_id)
+    if request.user != comment.author:
+        messages.error(request, '수정권한이 없습니다')
+        return redirect('footstep:post', username=username, subject=subject)
+    if request.method == "POST":
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.modify_date = timezone.now()
+            comment.save()
+            return redirect('footstep:post', username=username, subject=subject)
+    else:
+        form = CommentForm(instance=comment)
+    context = {'owner':owner, 'post':post, 'form':form}
+    return render(request, 'footstep/comment_form.html', context)
+
+
+@login_required(login_url='common:login')
+def comment_delete(request, username, subject, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    if request.user != comment.author: #비정상 루트로 수행시
+        messages.error(request, '삭제권한이 없습니다')
+    else:
+        comment.delete()
+    return redirect('footstep:post', username=username, subject=subject)

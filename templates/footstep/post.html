@@ -23,21 +23,28 @@
 <p>수정: {{ post.modify_date }}</p>
 {% endif %}
 <hr>
-<h4>댓글</h4>
-{% include 'footstep/comment_form.html' %} <!-- 댓글 폼 -->
+<h4>
+    댓글
+    <span>
+        <a class="btn btn-sm btn-primary" href="{% url 'footstep:comment_create' owner.username post.subject %}">쓰기</a>
+    </span>
+</h4>
+{% block comment_form %}
+<!-- 댓글 폼 -->
+{% endblock %}
 {% if post.comment_set.all %}
     {% for comment in post.comment_set.all %}
     <li>
         {{ comment.content }}
-        <!-- 버튼(임시)
+        {% if request.user == comment.author %}
         <span>
-            <a class="btn btn-sm btn-primary" href="#">수정</a>
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'footstep:comment_modify' owner.username post.subject comment.id %}">수정</a>
         </span>
         <span>
-            <a href="javascript:void(0)" class="delete btn btn-sm btn-primary"
-               data-uri="#">삭제</a>
+            <a href="javascript:void(0)" class="delete btn btn-sm btn-outline-secondary"
+               data-uri="{% url 'footstep:comment_delete' owner.username post.subject comment.id %}">삭제</a>
         </span>
-        -->
+        {% endif %}
     </li>
     {% endfor %}
 {% else %}
