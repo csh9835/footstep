@@ -7,18 +7,62 @@
     <span>
         <a class="btn btn-sm btn-primary" href="{% url 'footstep:post_modify' owner.username post.subject %}">수정</a>
     </span>
+    <span>
+        <a href="javascript:void(0)" class="delete btn btn-sm btn-primary"
+           data-uri="{% url 'footstep:post_delete' owner.username post.subject %}">삭제</a>
+    </span>
     {% endif %}
 </h1>
 <hr>
 {{ post.content }}
 <hr>
 <p>작성자: {{ post.author.username }}</p>
-<p>작성일시: {{ post.create_date }}</p>
+<p>작성: {{ post.create_date }}</p>
 <p>카테고리: {{ post.category.category_sub }}</p>
 {% if post.modify_date %}
-{{ post.modify_date }}
+<p>수정: {{ post.modify_date }}</p>
 {% endif %}
 <hr>
+<h4>
+    댓글
+    <span>
+        <a class="btn btn-sm btn-primary" href="{% url 'footstep:comment_create' owner.username post.subject %}">쓰기</a>
+    </span>
+</h4>
+{% block comment_form %}
+<!-- 댓글 폼 -->
+{% endblock %}
+{% if post.comment_set.all %}
+    {% for comment in post.comment_set.all %}
+    <li>
+        {{ comment.content }}
+        {% if request.user == comment.author %}
+        <span>
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'footstep:comment_modify' owner.username post.subject comment.id %}">수정</a>
+        </span>
+        <span>
+            <a href="javascript:void(0)" class="delete btn btn-sm btn-outline-secondary"
+               data-uri="{% url 'footstep:comment_delete' owner.username post.subject comment.id %}">삭제</a>
+        </span>
+        {% endif %}
+    </li>
+    {% endfor %}
+{% else %}
+    <span>댓글이 없습니다.</span>
+{% endif %}
 
-    
+{% endblock %}
+
+
+{% block script %}
+<script type='text/javascript'>
+    const delete_elements = document.getElementsByClassName("delete");
+    Array.from(delete_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if(confirm("정말로 삭제하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+</script>
 {% endblock %}
