@@ -1,15 +1,27 @@
 {% extends 'base/personal_base.html' %}
 {% block personal_content %}
 
-    {% if category %}
-        <h1 class="border-bottom p-2">{{ category.category_sub }}</h1>
-        {% for post in category.post_set.all %}
-        <div>      
-            <a class="text-dark" href="{% url 'footstep:post' owner.username post.subject %}">{{ post }}</a>
-        </div>
-        {% endfor %}
-    {% else %}
-    <h2>게시글이 없습니다.</h2>
+<h1 class="border-bottom p-2">
+    {{ category.category_sub }}
+    ({{ category.post_set.count }})
+</h1>
+{% if category.post_set.count != 0 %}
+    {% for post in category.post_set.all %}
+    <div>      
+        <a class="text-dark" href="{% url 'footstep:post' owner.username post.subject %}">{{ post }}</a>
+    </div>
+    {% endfor %}
+{% else %}
+<h4>
+    게시글이 없습니다.
+    {% if user.username == owner.username %}
+    <p class="py-1">삭제하시겠습니까?</p>
+    <p>
+        <a href="javascript:void(0)" class="delete btn btn-primary"
+           data-uri="{% url 'footstep:category_delete' owner.username category.category_sub %}">삭제</a>
+    </p>
     {% endif %}
+</h4>
+{% endif %}
     
 {% endblock %}

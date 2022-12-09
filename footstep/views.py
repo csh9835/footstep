@@ -27,6 +27,17 @@ def category(request, username, category_sub):
     return render(request, 'footstep/category.html', context)
 
 
+@login_required(login_url='common:login')
+def category_delete(request, username, category_sub):
+    owner = get_object_or_404(User, username=username)
+    category = get_object_or_404(owner.sidebarcontent_set, category_sub=category_sub)
+    if request.user != category.owner: #비정상 루트로 수행시
+        messages.error(request, '삭제권한이 없습니다')
+    else:
+        category.delete()
+    return redirect('footstep:personal', username=username)
+
+
 def post(request, username, subject):
     owner = get_object_or_404(User, username=username)
     post = get_object_or_404(owner.post_set, subject=subject)

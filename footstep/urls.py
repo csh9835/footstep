@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('<str:username>/', views.personal, name='personal'),
     path('<str:username>/category=<str:category_sub>/', views.category, name='category'),
+    path('<str:username>/category=<str:category_sub>/delete/', views.category_delete, name='category_delete'),    
     path('<str:username>/post=<str:subject>/', views.post, name='post'),
     path('<str:username>/create/', views.post_create, name='post_create'),
     path('<str:username>/post=<str:subject>/modify/', views.post_modify, name='post_modify'),
