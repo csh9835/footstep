@@ -1,0 +1,32 @@
+{% extends 'base/main_base.html' %}
+{% block main_content %}
+
+<div class="p-5">
+    <form method="post">
+        {% csrf_token %}
+        {% include 'form_errors.html' %}
+        <div class="mb-3 shadow-sm">
+            <label for="username">ID</label>
+            <input type="text" class="form-control" name="username" id="username"
+            value="{{ form.username.value|default_if_none:'' }}">
+        </div>
+        <div class="mb-3 shadow-sm">
+            <label for="email">이메일</label>
+            <input type="email" class="form-control" name="email" id="email"
+            value="{{ form.email.value|default_if_none:'' }}">
+        </div>
+        <div class="mb-3 shadow-sm">
+            <label for="nickname">닉네임 (선택사항, 설정시 20자 이하)</label>
+            <input type="text" class="form-control" name="nickname" id="nickname" maxlength='20'
+            value="{{ pform.nickname.value|default_if_none:'' }}">
+        </div>
+        <div class="mb-3 shadow-sm">
+            <label for="blogname">블로그 이름 (선택사항, 설정시 50자 이하)</label>
+            <input type="text" class="form-control" name="blogname" id="blogname" maxlength='50'
+            value="{{ pform.blogname.value|default_if_none:'' }}">
+        </div>
+        <button type="submit" class="btn btn-primary">생성</button>
+    </form>
+</div>
+    
+{% endblock %}

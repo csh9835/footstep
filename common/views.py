@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
-from .form import UserForm
-from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+
+from .forms import UserForm,CustomUserChangeForm ,ProfileForm, User
 from .models import Profile
+
 
 def signup(request):
     if request.method == 'POST':
@@ -16,7 +18,36 @@ def signup(request):
             return redirect('footstep:index')
     else:
         form = UserForm()
-    return render(request, 'common/signup.html', {'form':form})
+    context = {'form':form}
+    return render(request, 'common/signup.html', context)
 
+
+@login_required(login_url='common:login')
 def profile(request):
     return render(request, 'common/profile.html')
+
+
+@login_required(login_url='common:login')
+def profile_modify(request):
+    user = get_object_or_404(User, username=request.user.username)
+    p = Profile.objects.filter(user=request.user)
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, instance=request.user)
+        if p:
+            pform = ProfileForm(request.POST, instance=user.profile)
+        else:
+            pform = ProfileForm(request.POST)
+        if form.is_valid():
+            form.save()
+            pro = pform.save(commit=False)
+            pro.user = request.user
+            pro.save()
+            return redirect('common:profile')
+    else:
+        form = CustomUserChangeForm(instance=request.user)
+        if p:
+            pform = ProfileForm(instance=user.profile)
+        else:
+            pform = ProfileForm()
+    context = {'form':form, 'pform':pform}
+    return render(request, 'common/profile_modify.html', context)
