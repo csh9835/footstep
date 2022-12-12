@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
 
 from .forms import UserForm,CustomUserChangeForm ,ProfileForm, User
 from .models import Profile
@@ -66,3 +67,14 @@ def password_change(request):
         form = PasswordChangeForm(request.user)
     context = {'form':form}
     return render(request, 'common/password_change.html', context)
+
+
+@login_required(login_url='common:login')
+def profile_delete(request):
+    user = get_object_or_404(User, username=request.user.username)
+    if request.POST.get('delete') == '회원탈퇴':
+        user.delete()
+        return redirect('footstep:index')
+    else:
+        messages.error(request, '탈퇴하는데 실패했습니다')
+        return redirect('common:profile')
