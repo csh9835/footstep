@@ -2,17 +2,16 @@
 {% block main_content %}
 
 <div class="p-5">
+    {% include 'errors.html' %}
     <h1 class="border-bottom p-3">
         내정보
         <span>
             <a class="btn btn-primary" href="{% url 'common:profile_modify' %}">프로필 수정</a>
         </span>
-        <!-- 임시
-            <span>
-                <a href="javascript:void(0)" class="delete btn btn-sm btn-primary"
-                data-uri="#">삭제</a>
-            </span>
-        -->
+        <span>
+            <a class="btn btn-primary" href="{% url 'common:password_change' %}" >비밀번호 변경</a>
+        </span>
+        {% include 'common/modal.html' %} <!-- 회원탈퇴 -->
     </h1>
     <p>{{ user.username }}</p>
     <p>{{ user.email }}</p>

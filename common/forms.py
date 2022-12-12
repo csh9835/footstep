@@ -9,7 +9,7 @@ class UserForm(UserCreationForm):
         model = User
         fields = ('username', 'password1', 'password2', 'email')
         labels = {
-            'username': '아이디',
+            'username': 'ID',
             'password1': '비밀번호',
             'password2': '비밀번호 확인',
         }
