@@ -9,8 +9,7 @@
             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
             <strong>ERROR</strong>
         </div>
-        {% for field in form %}
-        <!-- 필드 -->
+        {% for field in form %} <!-- 필드 -->
         {% if field.errors %}
         <div>
             <strong>{{ field.label }}</strong>
@@ -18,7 +17,7 @@
         </div>
         {% endif %}
         {% endfor %}
-        {% for error in form.non_field_errors %}
+        {% for error in form.non_field_errors %} <!-- 논필드 -->
         <div>
             <strong>{{ error }}</strong>
         </div>
