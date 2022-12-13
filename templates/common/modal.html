@@ -1,5 +1,5 @@
 <!-- 모달 -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">회원 탈퇴</button>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" >회원 탈퇴</button>
 
 <div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -10,11 +10,15 @@
             <div class="modal-body">
                 <p class="fs-6">
                     정말로 탈퇴하시겠습니까? <br>
-                    탈퇴를 원하시면 '회원탈퇴'를 입력해주세요.
+                    탈퇴를 원하시면 '회원탈퇴'를 입력 후 정보를 입력해주세요.
                 </p>
                 <form method="post" action="{% url 'common:profile_delete' %}">
                     {% csrf_token %}
                     <input type="text" class="form-control" name='delete' maxlength="4">
+                    <label for="username" class="fs-6">ID</label>
+                    <input type="text" class="form-control" name="username" id="username">
+                    <label for="password" class="fs-6">비밀번호</label>
+                    <input type="password" class="form-control" name="password" id="password">
                     <button type="submit" class="btn btn-danger">탈퇴합니다</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">아니오</button>
                 </form>
