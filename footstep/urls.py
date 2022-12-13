@@ -16,4 +16,6 @@ urlpatterns = [
     path('<str:username>/post=<str:subject>/comment_create/', views.comment_create, name='comment_create'),
     path('<str:username>/post=<str:subject>/comment_modify/<int:comment_id>/', views.comment_modify, name='comment_modify'),
     path('<str:username>/post=<str:subject>/comment_delete/<int:comment_id>/', views.comment_delete, name='comment_delete'),
+    path('<str:username>/post=<str:subject>/recommend/', views.post_recommend, name='post_recommend'),
+    path('<str:username>/post=<str:subject>/comment_recommend/<int:comment_id>/', views.comment_recommend, name='comment_recommend'),
 ]

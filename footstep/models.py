@@ -13,15 +13,17 @@ class Post(models.Model):
     content = models.TextField()
     create_date = models.DateTimeField()
     modify_date = models.DateTimeField(null=True, blank=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_post')
     category = models.ForeignKey(SidebarContent, on_delete=models.CASCADE)
+    recommend = models.ManyToManyField(User, related_name='recommend_post')
 
     def __str__(self):
         return self.subject
 
 class Comment(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_comment')
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     content = models.TextField()
     create_date = models.DateTimeField()
     modify_date = models.DateTimeField(null=True, blank=True)
+    recommend = models.ManyToManyField(User, related_name='recommend_comment')

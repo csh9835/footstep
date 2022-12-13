@@ -15,7 +15,7 @@ def index(request):
 
 def personal(request, username):
     owner = get_object_or_404(User, username=username)
-    posts = owner.post_set.order_by('-create_date')
+    posts = owner.author_post.order_by('-create_date')
     context = {'owner':owner, 'posts':posts}
     return render(request, 'footstep/personal.html', context)
 
@@ -40,7 +40,7 @@ def category_delete(request, username, category_sub):
 
 def post(request, username, subject):
     owner = get_object_or_404(User, username=username)
-    post = get_object_or_404(owner.post_set, subject=subject)
+    post = get_object_or_404(owner.author_post, subject=subject)
     context = {'owner':owner, 'post':post}
     return render(request, 'footstep/post.html', context)
 
@@ -52,7 +52,7 @@ def post_create(request, username):
         form = PostForm(request.POST)
         if form.is_valid():
             post = Post()
-            if post.subject != form.cleaned_data['subject'] and owner.post_set.filter(subject=form.cleaned_data['subject']): #게시글 제목 중복방지
+            if post.subject != form.cleaned_data['subject'] and owner.author_post.filter(subject=form.cleaned_data['subject']): #게시글 제목 중복방지
                 messages.error(request, '동일한 제목의 게시글이 있습니다')
             else:
                 post.subject = form.cleaned_data['subject']
@@ -74,7 +74,7 @@ def post_create(request, username):
 @login_required(login_url='common:login')
 def post_modify(request, username, subject):
     owner = get_object_or_404(User, username=username)
-    post = get_object_or_404(owner.post_set, subject=subject)
+    post = get_object_or_404(owner.author_post, subject=subject)
     i = {'subject':post.subject, 'category':post.category, 'content':post.content}
     if request.user != post.author: #비정상 루트로 수행시
         messages.error(request, '수정권한이 없습니다')
@@ -82,7 +82,7 @@ def post_modify(request, username, subject):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
-            if post.subject != form.cleaned_data['subject'] and owner.post_set.filter(subject=form.cleaned_data['subject']): #게시글 제목 중복방지
+            if post.subject != form.cleaned_data['subject'] and owner.author_post.filter(subject=form.cleaned_data['subject']): #게시글 제목 중복방지
                 messages.error(request, '동일한 제목의 게시글이 있습니다')
             else:
                 post.subject = form.cleaned_data['subject']
@@ -104,7 +104,7 @@ def post_modify(request, username, subject):
 @login_required(login_url='common:login')
 def post_delete(request, username, subject):
     owner = get_object_or_404(User, username=username)
-    post = get_object_or_404(owner.post_set, subject=subject)
+    post = get_object_or_404(owner.author_post, subject=subject)
     if request.user != post.author: #비정상 루트로 수행시
         messages.error(request, '삭제권한이 없습니다')
         return redirect('footstep:personal', username=username)
@@ -115,7 +115,7 @@ def post_delete(request, username, subject):
 @login_required(login_url='common:login')
 def comment_create(request, username, subject):
     owner = get_object_or_404(User, username=username)
-    post = get_object_or_404(owner.post_set, subject=subject)
+    post = get_object_or_404(owner.author_post, subject=subject)
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -134,7 +134,7 @@ def comment_create(request, username, subject):
 @login_required(login_url='common:login')
 def comment_modify(request, username, subject, comment_id):
     owner = get_object_or_404(User, username=username)
-    post = get_object_or_404(owner.post_set, subject=subject)
+    post = get_object_or_404(owner.author_post, subject=subject)
     comment = get_object_or_404(Comment, pk=comment_id)
     if request.user != comment.author:
         messages.error(request, '수정권한이 없습니다')
@@ -159,4 +159,25 @@ def comment_delete(request, username, subject, comment_id):
         messages.error(request, '삭제권한이 없습니다')
     else:
         comment.delete()
+    return redirect('footstep:post', username=username, subject=subject)
+
+
+@login_required(login_url='common:login')
+def post_recommend(request, username, subject):
+    owner = get_object_or_404(User, username=username)
+    post = get_object_or_404(owner.author_post, subject=subject)
+    if request.user == post.author:
+        messages.error(request, '본인의 게시글은 추천할수 없습니다')
+    else:
+        post.recommend.add(request.user)
+    return redirect('footstep:post', username=username, subject=subject)
+
+
+@login_required(login_url='common:login')
+def comment_recommend(request, username, subject, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    if request.user == comment.author:
+        messages.error(request, '본인의 댓글은 추천할수 없습니다')
+    else:
+        comment.recommend.add(request.user)
     return redirect('footstep:post', username=username, subject=subject)
