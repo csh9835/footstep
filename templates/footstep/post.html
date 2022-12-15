@@ -40,8 +40,8 @@
 {% block comment_form %}
 <!-- 댓글 폼 -->
 {% endblock %}
-{% if post.comment_set.all %}
-    {% for comment in post.comment_set.all %}
+{% if comments %}
+    {% for comment in comments %}
     <li>
         {{ comment.content }}
         <a href="javascript:void(0)" data-uri="{% url 'footstep:comment_recommend' owner.username post.subject comment.id %}"
@@ -62,6 +62,7 @@
         {% endif %}
     </li>
     {% endfor %}
+    {% include 'pagination.html' %} <!-- 페이징 -->
 {% else %}
     <span>댓글이 없습니다.</span>
 {% endif %}
@@ -77,6 +78,14 @@ Array.from(recommend_elements).forEach(function(element) {
         if(confirm("추천하시겠습니까?")) {
             location.href = this.dataset.uri;
         };
+    });
+});
+
+const page_elements = document.getElementsByClassName("page-link");
+Array.from(page_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        document.getElementById('page').value = this.dataset.page;
+        document.getElementById('getForm').submit();
     });
 });
 </script>

@@ -3,14 +3,15 @@
 
 <h1 class="border-bottom p-2">
     {{ category.category_sub }}
-    ({{ category.post_set.count }})
+    ({{ posts.paginator.count }})
 </h1>
-{% if category.post_set.count != 0 %}
-    {% for post in category.post_set.all %}
+{% if posts.paginator.count != 0 %}
+    {% for post in posts %}
     <div>      
         <a class="text-dark" href="{% url 'footstep:post' owner.username post.subject %}">{{ post }}</a>
     </div>
     {% endfor %}
+    {% include 'pagination.html' %} <!-- 페이징 -->
 {% else %}
 <h4>
     게시글이 없습니다.

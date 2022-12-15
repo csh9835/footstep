@@ -1,14 +1,15 @@
 {% extends 'base/personal_base.html' %}
 {% block personal_content %}
 
-    {% if posts %}
-        {% for post in posts %}
-        <div>
-            <a class="text-dark" href="{% url 'footstep:post' owner.username post.subject %}">{{ post }}</a>
-        </div>
-        {% endfor %}
-    {% else %}
-    <h2>게시글이 없습니다.</h2>
-    {% endif %}
+{% if posts %}
+    {% for post in posts %}
+    <div>
+        <a class="text-dark" href="{% url 'footstep:post' owner.username post.subject %}">{{ post }}</a>
+    </div>
+    {% endfor %}
+    {% include 'pagination.html' %} <!-- 페이징 -->
+{% else %}
+<h2>게시글이 없습니다.</h2>
+{% endif %}
     
 {% endblock %}

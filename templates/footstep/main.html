@@ -1,12 +1,31 @@
 {% extends 'base/main_base.html' %}
 {% block main_content %}
+
 {% if allposts %}
 <ul>
     {% for post in allposts %}
-    <li><a href="{% url 'footstep:personal' post.author %}">{{ post.subject }}</a></li>
+    <li><a href="{% url 'footstep:post' post.author post.subject %}">{{ post.subject }}</a></li>
     {% endfor %}
 </ul>
+{% include 'pagination.html' %} <!-- 페이징 -->
+<form id="getForm" method="get" action="{% url 'footstep:index' %}">
+    <input type="hidden" id="page" name="page" value="{{ page }}">
+</form>
 {% else %}
 <p>게시글이 없습니다.</p>
 {% endif %}
+
+{% endblock %}
+
+
+{% block script %}
+<script type='text/javascript'>
+const page_elements = document.getElementsByClassName("page-link");
+Array.from(page_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        document.getElementById('page').value = this.dataset.page;
+        document.getElementById('getForm').submit();
+    });
+});
+</script>
 {% endblock %}
