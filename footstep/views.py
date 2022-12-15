@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 from .models import User, Post, Comment
 from .forms import PostForm, CommentForm
@@ -9,21 +10,31 @@ from .forms import PostForm, CommentForm
 
 def index(request):
     allposts = Post.objects.order_by('-create_date')
-    context = {'allposts':allposts}
+    page = request.GET.get('page', '1')
+    paginator = Paginator(allposts, 10)
+    pagination = paginator.get_page(page)
+    context = {'allposts':pagination, 'pagination':pagination}
     return render(request, 'footstep/main.html', context)
 
 
 def personal(request, username):
     owner = get_object_or_404(User, username=username)
     posts = owner.author_post.order_by('-create_date')
-    context = {'owner':owner, 'posts':posts}
+    page = request.GET.get('page', '1')
+    paginator = Paginator(posts, 10)
+    pagination = paginator.get_page(page)
+    context = {'owner':owner, 'posts':pagination, 'pagination':pagination}
     return render(request, 'footstep/personal.html', context)
 
 
 def category(request, username, category_sub):
     owner = get_object_or_404(User, username=username)
     category = get_object_or_404(owner.sidebarcontent_set, category_sub=category_sub)
-    context = {'owner':owner, 'category':category}
+    posts = category.post_set.order_by('-create_date')
+    page = request.GET.get('page', '1')
+    paginator = Paginator(posts, 10)
+    pagination = paginator.get_page(page)
+    context = {'owner':owner, 'category':category, 'posts':pagination, 'pagination':pagination}
     return render(request, 'footstep/category.html', context)
 
 
@@ -41,7 +52,11 @@ def category_delete(request, username, category_sub):
 def post(request, username, subject):
     owner = get_object_or_404(User, username=username)
     post = get_object_or_404(owner.author_post, subject=subject)
-    context = {'owner':owner, 'post':post}
+    comments = post.comment_set.order_by('create_date')
+    page = request.GET.get('page', '1')
+    paginator = Paginator(comments, 10)
+    pagination = paginator.get_page(page)
+    context = {'owner':owner, 'post':post, 'comments':pagination, 'pagination':pagination}
     return render(request, 'footstep/post.html', context)
 
 
@@ -116,6 +131,10 @@ def post_delete(request, username, subject):
 def comment_create(request, username, subject):
     owner = get_object_or_404(User, username=username)
     post = get_object_or_404(owner.author_post, subject=subject)
+    comments = post.comment_set.order_by('create_date')
+    page = request.GET.get('page', '1')
+    paginator = Paginator(comments, 10)
+    pagination = paginator.get_page(page)
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -127,7 +146,7 @@ def comment_create(request, username, subject):
             return redirect('footstep:post', username=username, subject=subject)
     else:
         form = CommentForm()
-    context = {'owner':owner, 'post':post, 'form':form}
+    context = {'owner':owner, 'post':post, 'form':form, 'comments':pagination, 'pagination':pagination}
     return render(request, 'footstep/comment_form.html', context)
 
 
@@ -135,7 +154,11 @@ def comment_create(request, username, subject):
 def comment_modify(request, username, subject, comment_id):
     owner = get_object_or_404(User, username=username)
     post = get_object_or_404(owner.author_post, subject=subject)
-    comment = get_object_or_404(Comment, pk=comment_id)
+    comments = post.comment_set.order_by('create_date')
+    comment = get_object_or_404(comments, pk=comment_id)
+    page = request.GET.get('page', '1')
+    paginator = Paginator(comments, 10)
+    pagination = paginator.get_page(page)
     if request.user != comment.author:
         messages.error(request, '수정권한이 없습니다')
         return redirect('footstep:post', username=username, subject=subject)
@@ -148,7 +171,7 @@ def comment_modify(request, username, subject, comment_id):
             return redirect('footstep:post', username=username, subject=subject)
     else:
         form = CommentForm(instance=comment)
-    context = {'owner':owner, 'post':post, 'form':form}
+    context = {'owner':owner, 'post':post, 'form':form, 'comments':pagination, 'pagination':pagination}
     return render(request, 'footstep/comment_form.html', context)
 
 

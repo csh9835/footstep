@@ -6,7 +6,7 @@
     {% csrf_token %}
     {% include 'form_errors.html' %}
     <div class="mb-3">
-        <textarea name="content" id="content" class="form-control" rows="10">{{ form.content.value|default_if_none:'' }}</textarea>
+        <textarea name="content" id="content" class="form-control" rows="3">{{ form.content.value|default_if_none:'' }}</textarea>
         <button type="submit" class="btn btn-sm btn-primary m-1">저장</button>
     </div>
 </form>

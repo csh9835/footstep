@@ -21,6 +21,9 @@
             {% block personal_content %}
             <!-- 개인 컨텐츠 -->
             {% endblock %}
+            <form id="getForm" method="get">
+                <input type="hidden" id="page" name="page" value="{{ page }}">
+            </form>
         </div>
     </main>
 </div>
@@ -28,13 +31,21 @@
 
 {% block script %}
 <script type='text/javascript'>
-    const delete_elements = document.getElementsByClassName("delete");
-    Array.from(delete_elements).forEach(function(element) {
-        element.addEventListener('click', function() {
-            if(confirm("정말로 삭제하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            };
-        });
+const delete_elements = document.getElementsByClassName("delete");
+Array.from(delete_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        if(confirm("정말로 삭제하시겠습니까?")) {
+            location.href = this.dataset.uri;
+        };
     });
+});
+
+const page_elements = document.getElementsByClassName("page-link");
+Array.from(page_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        document.getElementById('page').value = this.dataset.page;
+        document.getElementById('getForm').submit();
+    });
+});
 </script>
 {% endblock %}
