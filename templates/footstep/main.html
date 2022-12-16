@@ -1,6 +1,16 @@
 {% extends 'base/main_base.html' %}
 {% block main_content %}
 
+<div class="input-group">
+    <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" id="btn_search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+            </svg>
+        </button>
+    </div>
+    <input type="text" id="search_kw" class="form-control" value="{{ kw|default_if_none:'' }}">
+</div>
 {% if allposts %}
 <ul>
     {% for post in allposts %}
@@ -9,6 +19,7 @@
 </ul>
 {% include 'pagination.html' %} <!-- 페이징 -->
 <form id="getForm" method="get" action="{% url 'footstep:index' %}">
+    <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
     <input type="hidden" id="page" name="page" value="{{ page }}">
 </form>
 {% else %}
@@ -26,6 +37,13 @@ Array.from(page_elements).forEach(function(element) {
         document.getElementById('page').value = this.dataset.page;
         document.getElementById('getForm').submit();
     });
+});
+
+const btn_search = document.getElementById("btn_search");
+btn_search.addEventListener('click', function() {
+    document.getElementById('kw').value = document.getElementById('search_kw').value;
+    document.getElementById('page').value = 1;
+    document.getElementById('getForm').submit();
 });
 </script>
 {% endblock %}
