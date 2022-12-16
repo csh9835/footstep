@@ -3,23 +3,49 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 from .models import User, Post, Comment
 from .forms import PostForm, CommentForm
 
 
+def search(obj, k):
+    filter_obj = obj.filter(
+        Q(subject__icontains=k) | #제목
+        Q(content__icontains=k) | #내용
+        Q(category__category_sub__icontains=k) | #카테고리
+        Q(author__username__icontains=k) #작성자
+    ).distinct()
+    return filter_obj
+
+
 def index(request):
     allposts = Post.objects.order_by('-create_date')
+    kw = request.GET.get('kw', '')
     page = request.GET.get('page', '1')
+    if kw:
+        allposts = allposts.filter(
+            Q(subject__icontains=kw) | #제목
+            Q(content__icontains=kw) | #내용
+            Q(category__category_sub__icontains=kw) | #카테고리
+            Q(author__username__icontains=kw) #작성자
+        ).distinct()
     paginator = Paginator(allposts, 10)
     pagination = paginator.get_page(page)
-    context = {'allposts':pagination, 'pagination':pagination}
+    context = {'allposts':pagination, 'pagination':pagination, 'page': page, 'kw': kw}
     return render(request, 'footstep/main.html', context)
 
 
 def personal(request, username):
     owner = get_object_or_404(User, username=username)
     posts = owner.author_post.order_by('-create_date')
+    kw = request.GET.get('kw', '')
+    if kw:
+        posts = posts.filter(
+            Q(subject__icontains=kw) | #제목
+            Q(content__icontains=kw) | #내용
+            Q(category__category_sub__icontains=kw) #카테고리
+        ).distinct()
     page = request.GET.get('page', '1')
     paginator = Paginator(posts, 10)
     pagination = paginator.get_page(page)
