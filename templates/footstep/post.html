@@ -14,7 +14,7 @@
     {% endif %}
 </h1>
 <hr>
-{{ post.content }}
+{{ post.content|safe }}
 <hr>
 <p>작성자: {{ post.author.username }}</p>
 <p>작성: {{ post.create_date }}</p>
@@ -70,7 +70,7 @@
 {% endblock %}
 
 
-{% block script %}
+{% block script2 %}
 <script>
 const recommend_elements = document.getElementsByClassName("recommend");
 Array.from(recommend_elements).forEach(function(element) {
@@ -79,21 +79,6 @@ Array.from(recommend_elements).forEach(function(element) {
             location.href = this.dataset.uri;
         };
     });
-});
-
-const page_elements = document.getElementsByClassName("page-link");
-Array.from(page_elements).forEach(function(element) {
-    element.addEventListener('click', function() {
-        document.getElementById('getpage').value = this.dataset.page;
-        document.getElementById('getForm').submit();
-    });
-});
-
-const btn_search = document.getElementById("btn_search");
-btn_search.addEventListener('click', function() {
-    document.getElementById('kw').value = document.getElementById('search_kw').value;
-    document.getElementById('page').value = 1;
-    document.getElementById('searchForm').submit();
 });
 </script>
 {% endblock %}

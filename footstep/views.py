@@ -49,7 +49,7 @@ def personal(request, username):
     page = request.GET.get('page', '1')
     paginator = Paginator(posts, 10)
     pagination = paginator.get_page(page)
-    context = {'owner':owner, 'posts':pagination, 'pagination':pagination}
+    context = {'owner':owner, 'posts':pagination, 'pagination':pagination, 'page':page, 'kw':kw}
     return render(request, 'footstep/personal.html', context)
 
 
