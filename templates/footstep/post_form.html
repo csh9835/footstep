@@ -25,9 +25,9 @@
     </div>
     <div class="mb-3">
         <label for="content" class="form-label">내용</label>
-        <textarea class="form-control" 
-                  name="content"
-                  id="content" rows="10">{{ form.content.value|default_if_none:''}}</textarea>
+        <div id="content">
+            {{ form.content|safe }}
+        </div>
     </div>
     <button type="submit" class="btn btn-primary">저장</button>
 </form>

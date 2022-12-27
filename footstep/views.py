@@ -4,19 +4,27 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.conf import settings
+import re, os
 
 from .models import User, Post, Comment
 from .forms import PostForm, CommentForm
 
+def img_check(path):
+    s = '.{4}[-].{2}[-].{2}[/].{8}[-].{4}[-].{4}[-].{4}[-].{12}[.].*?(?=")'
+    p = re.compile(s)
+    f = p.findall(path, re.DOTALL)
+    return f
 
-def search(obj, k):
-    filter_obj = obj.filter(
-        Q(subject__icontains=k) | #제목
-        Q(content__icontains=k) | #내용
-        Q(category__category_sub__icontains=k) | #카테고리
-        Q(author__username__icontains=k) #작성자
-    ).distinct()
-    return filter_obj
+def img_delete(b_list, a_list):
+    for item in b_list:
+        if item not in a_list:
+            p = settings.MEDIA_ROOT+'django-summernote/'
+            os.remove(p + item)
+            try: #빈 디렉토리 삭제
+                os.rmdir(p + item[:11])
+            except:
+                pass
 
 
 def index(request):
@@ -49,7 +57,7 @@ def personal(request, username):
     page = request.GET.get('page', '1')
     paginator = Paginator(posts, 10)
     pagination = paginator.get_page(page)
-    context = {'owner':owner, 'posts':pagination, 'pagination':pagination}
+    context = {'owner':owner, 'posts':pagination, 'pagination':pagination, 'page':page, 'kw':kw}
     return render(request, 'footstep/personal.html', context)
 
 
@@ -112,8 +120,10 @@ def post_create(request, username):
     return render(request, 'footstep/post_form.html', context)
 
 
+junk = []
 @login_required(login_url='common:login')
 def post_modify(request, username, subject):
+    global junk
     owner = get_object_or_404(User, username=username)
     post = get_object_or_404(owner.author_post, subject=subject)
     i = {'subject':post.subject, 'category':post.category, 'content':post.content}
@@ -123,7 +133,9 @@ def post_modify(request, username, subject):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
-            if post.subject != form.cleaned_data['subject'] and owner.author_post.filter(subject=form.cleaned_data['subject']): #게시글 제목 중복방지
+            img_path = img_check(post.content) #이미지 파일이 있는지 확인
+            if post.subject != form.cleaned_data['subject'] and owner.author_post.filter(subject=form.cleaned_data['subject']): #게시글 제목 중복방지 
+                junk += img_check(request.POST['content'])
                 messages.error(request, '동일한 제목의 게시글이 있습니다')
             else:
                 post.subject = form.cleaned_data['subject']
@@ -135,6 +147,12 @@ def post_modify(request, username, subject):
                     post.category = owner.sidebarcontent_set.create(category_sub=form.cleaned_data['category'])
                 post.modify_date = timezone.now()
                 post.save()
+                if img_path: #변동으로 인해 필요없어진 이미지파일 제거
+                    img_delete(img_path, img_check(post.content))
+                if junk: #에러로 인해 db에는 반영되지 않았지만 media파일엔 남은경우 삭제
+                    print(junk)
+                    img_delete(junk, img_check(post.content))
+                    junk = []
                 return redirect('footstep:personal', username=username)
     else: 
         form = PostForm(i)
@@ -149,6 +167,8 @@ def post_delete(request, username, subject):
     if request.user != post.author: #비정상 루트로 수행시
         messages.error(request, '삭제권한이 없습니다')
         return redirect('footstep:personal', username=username)
+    img_path = img_check(post.content) #이미지파일 확인후
+    img_delete(img_path, []) #있으면 제거
     post.delete()
     return redirect('footstep:personal', username=username)
 
