@@ -130,3 +130,14 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 SUMMERNOTE_THEME = 'bs4'
+
+SUMMERNOTE_CONFIG = {
+    'summernote': {
+        'width': '100%', 
+        'height': '700px',
+        'lang': 'ko-KR',
+        'focus': True,
+        'fontNames': ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', '맑은 고딕', '궁서', '굴림체', '굴림', '바탕체'],
+    },
+    'attachment_filesize_limit': 2560 * 1440 * 2 #이미지 용량제한
+}

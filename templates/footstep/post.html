@@ -14,7 +14,9 @@
     {% endif %}
 </h1>
 <hr>
-{{ post.content|safe }}
+<div class="card p-3">
+    {{ post.content|safe }}
+</div>
 <hr>
 <p>작성자: {{ post.author.username }}</p>
 <p>작성: {{ post.create_date }}</p>

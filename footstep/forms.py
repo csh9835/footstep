@@ -6,7 +6,7 @@ class PostForm(forms.Form):
     subject = forms.CharField(max_length=150, label='제목')
     category = forms.CharField(max_length=150, label='카테고리')
     content = forms.CharField(
-        widget=SummernoteWidget( attrs={ 'summernote': {'width': '100%', 'height': '600px', 'lang': 'ko-KR'} } ), 
+        widget=SummernoteWidget(),
         label='내용'
     )
 
