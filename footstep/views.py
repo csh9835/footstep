@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseNotFound
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -8,7 +9,7 @@ from django.conf import settings
 import re, os
 
 from .models import User, Post, Comment
-from .forms import PostForm, CommentForm
+from .forms import PostForm, CommentForm, CategoryForm
 
 def img_check(path):
     s = '.{4}[-].{2}[-].{2}[/].{8}[-].{4}[-].{4}[-].{4}[-].{12}[.].*?(?=")'
@@ -70,6 +71,24 @@ def category(request, username, category_sub):
     pagination = paginator.get_page(page)
     context = {'owner':owner, 'category':category, 'posts':pagination, 'pagination':pagination}
     return render(request, 'footstep/category.html', context)
+
+
+def category_modify(request, username, category_sub):
+    owner = get_object_or_404(User, username=username)
+    category = get_object_or_404(owner.sidebarcontent_set, category_sub=category_sub)
+    if request.method == 'GET':
+        return HttpResponseNotFound('404 Not Found')
+    form = CategoryForm(request.POST, instance=category)
+    if form.is_valid():
+        newsub = form.cleaned_data['category_sub']
+        if newsub != category_sub and owner.sidebarcontent_set.filter(category_sub=newsub):
+            messages.error(request, '중복되는 카테고리 이름입니다')
+            return redirect('footstep:category', username=username, category_sub=category_sub)
+        else:
+            form.save()
+            return redirect('footstep:category', username=username, category_sub=newsub)
+    messages.error(request, '변경할 카테고리 이름을 입력해주세요')
+    return redirect('footstep:category', username=username, category_sub=category_sub)
 
 
 @login_required(login_url='common:login')

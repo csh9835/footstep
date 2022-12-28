@@ -138,6 +138,7 @@ SUMMERNOTE_CONFIG = {
         'lang': 'ko-KR',
         'focus': True,
         'fontNames': ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', '맑은 고딕', '궁서', '굴림체', '굴림', '바탕체'],
+        'placeholder': '내용을 입력해주세요'
     },
     'attachment_filesize_limit': 2560 * 1440 * 2 #이미지 용량제한
 }

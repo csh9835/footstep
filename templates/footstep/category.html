@@ -1,9 +1,11 @@
 {% extends 'base/personal_base.html' %}
 {% block personal_content %}
 
+{% include 'errors.html' %}
 <h1 class="border-bottom p-2">
     {{ category.category_sub }}
     ({{ posts.paginator.count }})
+    {% include 'footstep/category_modify.html' %}
 </h1>
 {% if posts.paginator.count != 0 %}
     {% for post in posts %}
