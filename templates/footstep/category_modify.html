@@ -1,0 +1,20 @@
+<!-- 카테고리 수정 -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Backdrop" >수정</button>
+
+<div class="modal fade" id="Backdrop" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">카테고리 이름 변경</h5>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{% url 'footstep:category_modify' owner.username category.category_sub %}">
+                    {% csrf_token %}
+                    <input type="text" class="form-control" name='category_sub' value="{{ category.category_sub }}">
+                    <button type="submit" class="btn btn-primary">변경</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

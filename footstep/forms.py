@@ -1,5 +1,5 @@
 from django import forms
-from .models import Comment
+from .models import Comment, SidebarContent
 from django_summernote.widgets import SummernoteWidget
 
 class PostForm(forms.Form):
@@ -9,6 +9,11 @@ class PostForm(forms.Form):
         widget=SummernoteWidget(),
         label='내용'
     )
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = SidebarContent
+        fields = ['category_sub']
 
 class CommentForm(forms.ModelForm):
     class Meta:
