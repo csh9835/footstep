@@ -1,4 +1,6 @@
 <!-- 카테고리 수정 -->
+
+{% if user.username == owner.username %}
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Backdrop" >수정</button>
 
 <div class="modal fade" id="Backdrop" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -18,3 +20,4 @@
         </div>
     </div>
 </div>
+{% endif %}

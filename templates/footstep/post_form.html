@@ -16,6 +16,14 @@
                value="{{ form.subject.value|default_if_none:'' }}">
     </div>
     <div class="mb-3">
+        <label for="subtitle" class="form-label">소제목 (선택사항)</label>
+        <input type="text" 
+               class="form-control" 
+               name="subtitle" 
+               id="subtitle"
+               value="{{ form.subtitle.value|default_if_none:'' }}">
+    </div>
+    <div class="mb-3">
         <label for="category" class="form-label">카테고리</label>
         <input type="text" 
                class="form-control" 
