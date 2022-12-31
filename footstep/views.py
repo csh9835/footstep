@@ -28,6 +28,17 @@ def img_delete(b_list, a_list):
                 pass
 
 
+def thumbnail(args):
+    l = []
+    for arg in args:
+        i = img_check(arg.content)
+        if i:
+            l.append(settings.MEDIA_URL + 'django-summernote/' + i[0])
+        else:
+            l.append('')
+    return l
+
+
 def index(request):
     allposts = Post.objects.order_by('-create_date')
     kw = request.GET.get('kw', '')
@@ -39,9 +50,10 @@ def index(request):
             Q(category__category_sub__icontains=kw) | #카테고리
             Q(author__username__icontains=kw) #작성자
         ).distinct()
-    paginator = Paginator(allposts, 10)
+    paginator = Paginator(allposts, 16)
     pagination = paginator.get_page(page)
-    context = {'allposts':pagination, 'pagination':pagination, 'page': page, 'kw': kw}
+    thumbnail_img = thumbnail(pagination)
+    context = {'allposts':pagination, 'pagination':pagination, 'page': page, 'kw': kw, 'thumbnail_img':thumbnail_img}
     return render(request, 'footstep/main.html', context)
 
 
@@ -73,9 +85,13 @@ def category(request, username, category_sub):
     return render(request, 'footstep/category.html', context)
 
 
+@login_required(login_url='common:login')
 def category_modify(request, username, category_sub):
     owner = get_object_or_404(User, username=username)
     category = get_object_or_404(owner.sidebarcontent_set, category_sub=category_sub)
+    if request.user != category.owner: #비정상 루트로 수행시
+        messages.error(request, '수정권한이 없습니다')
+        return redirect('footstep:category', username=username, category_sub=category_sub)
     if request.method == 'GET':
         return HttpResponseNotFound('404 Not Found')
     form = CategoryForm(request.POST, instance=category)
@@ -124,6 +140,7 @@ def post_create(request, username):
                 messages.error(request, '동일한 제목의 게시글이 있습니다')
             else:
                 post.subject = form.cleaned_data['subject']
+                post.subtitle = form.cleaned_data['subtitle']
                 post.content = form.cleaned_data['content']
                 post.author = owner
                 try: #기존 카테고리 이름이 있으면
@@ -145,7 +162,7 @@ def post_modify(request, username, subject):
     global junk
     owner = get_object_or_404(User, username=username)
     post = get_object_or_404(owner.author_post, subject=subject)
-    i = {'subject':post.subject, 'category':post.category, 'content':post.content}
+    i = {'subject':post.subject, 'category':post.category, 'content':post.content, 'subtitle':post.subtitle}
     if request.user != post.author: #비정상 루트로 수행시
         messages.error(request, '수정권한이 없습니다')
         return redirect('footstep:personal', username=username)
@@ -158,6 +175,7 @@ def post_modify(request, username, subject):
                 messages.error(request, '동일한 제목의 게시글이 있습니다')
             else:
                 post.subject = form.cleaned_data['subject']
+                post.subtitle = form.cleaned_data['subtitle']
                 post.content = form.cleaned_data['content']
                 post.author = owner
                 try: #기존 카테고리 이름이 있으면
