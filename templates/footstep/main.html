@@ -1,15 +1,6 @@
 {% extends 'base/main_base.html' %}
 {% load tag_filter %}
-{% load static %}
 {% block main_content %}
-<style>
-    .imgtext {
-        display: -webkit-box;
-        -webkit-line-clamp: 4;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-</style>
 <div class="container py-5">
     <div class="row row-cols-2 justify-content-center">
         <div class="col">
@@ -38,7 +29,7 @@
                         <div class="card-body pb-0">
                             <a href="{% url 'footstep:post' post.author post.subject %}" class="text-decoration-none text-dark">
                                 <h5 class="card-title fw-bold text-truncate">{{ post.subject }}</h5>
-                                <div class="card-text {% if img %}imgtext{% endif %}">{{ post.subtitle }}</div>
+                                <p class="card-text {% if img %}imgtext{% endif %}">{{ post.subtitle }}</p>
                             </a>
                         </div>
                         {% endwith %}
@@ -62,7 +53,7 @@
         </div>
         {% include 'pagination.html' %} <!-- 페이징 -->
     {% else %}
-        <p>게시글이 없습니다.</p>
+        <h3 class="text-center">게시글이 없습니다.</h3>
     {% endif %}
     <form id="getForm" method="get" action="{% url 'footstep:index' %}">
         <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">

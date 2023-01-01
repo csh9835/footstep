@@ -68,9 +68,10 @@ def personal(request, username):
             Q(category__category_sub__icontains=kw) #카테고리
         ).distinct()
     page = request.GET.get('page', '1')
-    paginator = Paginator(posts, 10)
+    paginator = Paginator(posts, 8)
     pagination = paginator.get_page(page)
-    context = {'owner':owner, 'posts':pagination, 'pagination':pagination, 'page':page, 'kw':kw}
+    thumbnail_img = thumbnail(pagination)
+    context = {'owner':owner, 'posts':pagination, 'pagination':pagination, 'page':page, 'kw':kw, 'thumbnail_img':thumbnail_img}
     return render(request, 'footstep/personal.html', context)
 
 
@@ -79,9 +80,10 @@ def category(request, username, category_sub):
     category = get_object_or_404(owner.sidebarcontent_set, category_sub=category_sub)
     posts = category.post_set.order_by('-create_date')
     page = request.GET.get('page', '1')
-    paginator = Paginator(posts, 10)
+    paginator = Paginator(posts, 8)
     pagination = paginator.get_page(page)
-    context = {'owner':owner, 'category':category, 'posts':pagination, 'pagination':pagination}
+    thumbnail_img = thumbnail(pagination)
+    context = {'owner':owner, 'category':category, 'posts':pagination, 'pagination':pagination, 'thumbnail_img':thumbnail_img}
     return render(request, 'footstep/category.html', context)
 
 
