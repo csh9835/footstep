@@ -1,0 +1,26 @@
+<!-- 포스트 카드 -->
+
+<div class="card shadow my-4" style="height: 200px;">
+    <div class="row h-100 g-0">
+        {% if img %}
+        <div class="col-3">
+            <a href="{% url 'footstep:post' owner.username post.subject %}">
+                <img src="{{ img }}" alt="No img" class="rounded-start border-bottom border-end border-1" style="width: 100%; height: 199px; object-fit: cover;">
+            </a>
+        </div>
+        {% endif %}
+        <div class="col" style="height: 200px;">
+            <a href="{% url 'footstep:post' owner.username post.subject %}" class="h-100 text-decoration-none">
+                <div class="card-body text-dark pb-1">
+                    <h5 class="card-title fw-bold text-truncate">{{ post.subject }}</h5>
+                    <div class="card-text {% if img %}imgtext{% endif %}">{{ post.subtitle }}</div>
+                </div>
+                <small class="d-block text-secondary px-3">
+                    {% include 'icon/recommend.html' %} {{ post.recommend.count }} &nbsp;
+                    {% include 'icon/chat.html' %} {{ post.comment_set.count }} &nbsp;
+                    {% if post.modify_date %}{{ post.modify_date }} (수정됨){% else %}{{ post.create_date }}{% endif %}
+                </small>
+            </a>
+        </div>
+    </div>
+</div>

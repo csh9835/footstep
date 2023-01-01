@@ -1,4 +1,5 @@
 {% extends 'base/personal_base.html' %}
+{% load tag_filter %}
 {% block personal_content %}
 
 {% include 'errors.html' %}
@@ -9,13 +10,13 @@
 </h1>
 {% if posts.paginator.count != 0 %}
     {% for post in posts %}
-    <div>      
-        <a class="text-dark" href="{% url 'footstep:post' owner.username post.subject %}">{{ post }}</a>
-    </div>
+        {% with img=thumbnail_img|list_index:forloop.counter0 %}
+        {% include 'footstep/post_card.html' %} <!-- 포스트 카드 -->
+        {% endwith %}
     {% endfor %}
     {% include 'pagination.html' %} <!-- 페이징 -->
 {% else %}
-<h4>
+<h4 class="text-center">
     게시글이 없습니다.
     {% if user.username == owner.username %}
     <p class="py-1">삭제하시겠습니까?</p>
