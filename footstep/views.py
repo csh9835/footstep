@@ -192,7 +192,7 @@ def post_modify(request, username, subject):
                     print(junk)
                     img_delete(junk, img_check(post.content))
                     junk = []
-                return redirect('footstep:personal', username=username)
+                return redirect('footstep:post', username=username, subject=post.subject)
     else: 
         form = PostForm(i)
     context = {'owner':owner, 'form':form}

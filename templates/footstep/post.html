@@ -1,6 +1,7 @@
 {% extends 'base/personal_base.html' %}
 {% block personal_content %}
 
+<!-- 포스트헤더 ↓ -->
 <h1 class="p-2">
     {{ post.subject }}
     {% if owner.username == user.username %}
@@ -13,54 +14,39 @@
     </span>
     {% endif %}
 </h1>
-<hr>
+<p class="px-2">
+    {{ post.category }} &nbsp; | &nbsp;
+    {{ post.author }} &nbsp; | &nbsp;
+    {{ post.create_date }}
+    {% if post.modify_date %}&nbsp; | &nbsp; 수정: {{ post.modify_date }}{% endif %}
+</p>
+<!-- 내용 ↓ -->
 <div class="card p-3 overflow-auto">
+    <h5 class="fw-bold">{{ post.subtitle }}</h5>
+    <br>
     {{ post.content|safe }}
 </div>
-<hr>
-<p>작성자: {{ post.author.username }}</p>
-<p>작성: {{ post.create_date }}</p>
-<p>카테고리: {{ post.category.category_sub }}</p>
-{% if post.modify_date %}
-<p>수정: {{ post.modify_date }}</p>
-{% endif %}
-<a href="javascript:void(0)" data-uri="{% url 'footstep:post_recommend' owner.username post.subject %}"
-    class="recommend btn btn-sm btn-outline-secondary">
-    {% include 'icon/recommend.html' %}
-    <span class="m-1">{{ post.recommend.count }}</span>
-</a>
-<hr>
-{% include 'errors.html' %}
-<h4>
-    댓글
+<!-- 버튼 ↓ -->
+<div class="pt-3 text-center">
+    <a href="javascript:void(0)" data-uri="{% url 'footstep:post_recommend' owner.username post.subject %}"
+        class="recommend btn btn-lg btn-primary">
+        {% include 'icon/recommend.html' %}
+        <span class="m-1">{{ post.recommend.count }}</span>
+    </a>
     <span>
-        <a class="btn btn-sm btn-primary" href="{% url 'footstep:comment_create' owner.username post.subject %}">쓰기</a>
+        <a class="btn btn-lg btn-primary" href="{% url 'footstep:comment_create' owner.username post.subject %}">댓글달기</a>
     </span>
-</h4>
+</div>
+<hr>
+<!-- 댓글 폼 ↓ -->
 {% block comment_form %}
-<!-- 댓글 폼 -->
 {% endblock %}
+{% include 'errors.html' %}
+<!-- 댓글 ↓ -->
+<h4>댓글: {{ comments.paginator.count }}개</h4>
 {% if comments %}
-    {% for comment in comments %}
-    <li>
-        {{ comment.content }}
-        <a href="javascript:void(0)" data-uri="{% url 'footstep:comment_recommend' owner.username post.subject comment.id %}"
-            class="recommend btn btn-sm btn-outline-secondary">
-            {% include 'icon/recommend.html' %}
-            <span>{{ comment.recommend.count }}</span>
-        </a>
-        {% if request.user == comment.author %}
-        <span>
-            <a class="btn btn-sm btn-outline-secondary" href="{% url 'footstep:comment_modify' owner.username post.subject comment.id %}">수정</a>
-        </span>
-        <span>
-            <a href="javascript:void(0)" class="delete btn btn-sm btn-outline-secondary"
-               data-uri="{% url 'footstep:comment_delete' owner.username post.subject comment.id %}">삭제</a>
-        </span>
-        {% endif %}
-    </li>
-    {% endfor %}
-    {% include 'pagination.html' %} <!-- 페이징 -->
+    {% include 'footstep/comment_card.html' %}
+    {% include 'pagination.html' %}
 {% else %}
     <span>댓글이 없습니다.</span>
 {% endif %}
