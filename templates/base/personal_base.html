@@ -1,5 +1,5 @@
 {% extends 'base/main_base.html' %}
-{% block tog %} <!-- 토글 -->
+{% block tog %} <!-- 토글 ↓ -->
 <button class="navbar-toggler d-md-none collapsed" 
         type="button" 
         data-bs-toggle="collapse" 
@@ -13,13 +13,14 @@
 {% endblock %}
 
 {% block main_content %}
-<div class="row vh-100">
-    {% include 'sidebar.html' %} <!-- 사이드 바 -->
+<div class="row vh-100"> 
+    <!-- 사이드 바 ↓ -->
+    {% include 'sidebar.html' %}
 
     <main class="col-md-8 ms-sm-auto col-lg-9 px-md-4">
         <div class="p-5 h-100 text-break">    
+            <!-- 개인 컨텐츠 ↓ -->
             {% block personal_content %}
-            <!-- 개인 컨텐츠 -->
             {% endblock %}
             <form id="getForm" method="get">
                 <input type="hidden" id="getpage" name="page" value="{{ page }}">
