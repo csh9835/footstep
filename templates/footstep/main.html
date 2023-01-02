@@ -2,15 +2,15 @@
 {% load tag_filter %}
 {% block main_content %}
 <div class="container py-5">
-    <div class="row row-cols-2 justify-content-center">
-        <div class="col">
+    <div class="row justify-content-center">
+        <div class="col-6">
             <div class="input-group pb-5">
                 <div class="input-group-append">
                     <button class="btn btn-primary btn-lg" type="button" id="btn_search">
                         {% include 'icon/search.html' %}
                     </button>
                 </div>
-                <input type="text" id="search_kw" class="form-control form-control-lg" value="{{ kw|default_if_none:'' }}">
+                <input type="text" id="search_kw" class="form-control form-control-lg" value="{{ kw|default_if_none:'' }}" placeholder="검색">
             </div>
         </div>
     </div>
@@ -51,7 +51,7 @@
                 </div>
             {% endfor %}
         </div>
-        {% include 'pagination.html' %} <!-- 페이징 -->
+        {% include 'pagination.html' %}
     {% else %}
         <h3 class="text-center">게시글이 없습니다.</h3>
     {% endif %}
