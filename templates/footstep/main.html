@@ -2,6 +2,7 @@
 {% load tag_filter %}
 {% block main_content %}
 <div class="container py-5">
+    <!-- 검색 폼 ↓ -->
     <div class="row justify-content-center">
         <div class="col-6">
             <div class="input-group pb-5">
@@ -15,6 +16,7 @@
         </div>
     </div>
     {% if allposts %}
+        <!-- 포스트카드 ↓ -->
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xxl-4">
             {% for post in allposts %}
                 <div class="col p-4">
@@ -51,6 +53,7 @@
                 </div>
             {% endfor %}
         </div>
+        <!-- 페이징 ↓ -->
         {% include 'pagination.html' %}
     {% else %}
         <h3 class="text-center">게시글이 없습니다.</h3>

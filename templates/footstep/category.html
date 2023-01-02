@@ -6,6 +6,7 @@
 <h1 class="border-bottom border-secondary border-2 p-2">
     {{ category.category_sub }}
     ({{ posts.paginator.count }})
+    <!-- 카테고리 수정 ↓ -->
     {% include 'footstep/category_modify.html' %}
 </h1>
 {% if posts.paginator.count != 0 %}
@@ -15,6 +16,7 @@
         {% include 'footstep/post_card.html' %}
         {% endwith %}
     {% endfor %}
+    <!-- 페이징 ↓ -->
     {% include 'pagination.html' %}
 {% else %}
 <h4 class="text-center">

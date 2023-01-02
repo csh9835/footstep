@@ -5,10 +5,12 @@
 {% if posts %}
     {% for post in posts %}
     {% with img=thumbnail_img|list_index:forloop.counter0 %}
-    {% include 'footstep/post_card.html' %} <!-- 포스트 카드 -->
+    <!-- 포스트카드 ↓ -->
+    {% include 'footstep/post_card.html' %}
     {% endwith %}
     {% endfor %}
-    {% include 'pagination.html' %} <!-- 페이징 -->
+    <!-- 페이징 ↓ -->
+    {% include 'pagination.html' %}
 {% else %}
 <h2 class="text-center">게시글이 없습니다.</h2>
 {% endif %}

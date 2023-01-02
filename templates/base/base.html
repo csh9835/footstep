@@ -10,16 +10,17 @@
         <link rel="stylesheet" href="{% static 'style.css' %}">
     </head>
     <body class="bg-success bg-opacity-25">
+        <!-- 기본 템플릿 내용 ↓ -->
         {% block content %}
-        <!-- 기본 템플릿 내용 -->
         {% endblock %}
 
-        <!-- JS -->
-        <script src="{% static 'bootstrap.min.js' %}"></script> <!-- 부트스트랩 JS -->
+        <!-- JS 시작-->
+        <!-- 부트스트랩JS ↓ -->
+        <script src="{% static 'bootstrap.min.js' %}"></script> 
         {% block script %}
         {% endblock %}
         {% block script2 %}
         {% endblock %}
-        <!-- JS -->
+        <!-- JS 끝 -->
     </body>
 </html>

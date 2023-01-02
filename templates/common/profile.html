@@ -11,7 +11,8 @@
         <span>
             <a class="btn btn-primary" href="{% url 'common:password_change' %}" >비밀번호 변경</a>
         </span>
-        {% include 'common/modal.html' %} <!-- 회원탈퇴 -->
+        <!-- 회원탈퇴 ↓ -->
+        {% include 'common/modal.html' %} 
     </h1>
     <p>{{ user.username }}</p>
     <p>{{ user.email }}</p>
