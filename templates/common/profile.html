@@ -1,9 +1,9 @@
 {% extends 'base/main_base.html' %}
 {% block main_content %}
 
-<div class="p-5">
+<div class="p-5" style="height: 80vh;">
     {% include 'errors.html' %}
-    <h1 class="border-bottom p-3">
+    <h1 class="border-bottom border-secondary p-3">
         내정보
         <span>
             <a class="btn btn-primary" href="{% url 'common:profile_modify' %}">프로필 수정</a>
@@ -29,5 +29,7 @@
     <p>블로그 이름이 설정되어있지 않습니다</p>
     {% endif %}
 </div>
+<hr>
+<small class="d-block text-center text-secondary">(C)2023.Footstep All rights reserved.</small>
 
 {% endblock %}

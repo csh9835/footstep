@@ -1,5 +1,5 @@
 <nav id="sidebarMenu" class="col-md-4 col-lg-3 d-md-block bg-secondary collapse">
-    <div class="position-sticky pt-3 navbar-nav-scroll" style="--bs-scroll-height: 90vh;" >
+    <div class="position-sticky pt-3 navbar-nav-scroll" style="--bs-scroll-height: 95vh;">
         <ul class="nav flex-column">
             <!-- 프로필 ↓ -->
             <li class="nav-item">
@@ -13,7 +13,7 @@
                     </h3>
                 </a>
             </li>
-            <li class="nav-item m-1 p-1">
+            <li class="nav-item m-1 p-1 border-bottom">
                 <div class="nav-item text-white">
                     {% if owner.profile.nickname %}
                     {{ owner.profile.nickname }}
@@ -25,9 +25,8 @@
             </li>
             {% if owner.username == user.username %}
             <!-- 글쓰기 ↓ -->
-            <a class="btn btn-primary mx-1" href="{% url 'footstep:post_create' user.username %}">글쓰기</a>
+            <a class="btn btn-primary m-1" href="{% url 'footstep:post_create' user.username %}">글쓰기</a>
             {% endif %}
-            <hr class="text-white">
             <!-- 검색 폼 ↓ -->
             <div class="input-group p-1">
                 <div class="input-group-append">
@@ -35,7 +34,8 @@
                         {% include 'icon/search.html' %}
                     </button>
                 </div>
-                <input type="text" id="search_kw" class="form-control" value="{{ kw|default_if_none:'' }}">
+                <input type="text" id="search_kw" class="form-control" 
+                value="{{ kw|default_if_none:'' }}" placeholder="검색">
             </div>
             <form id="searchForm" method="get" action="{% url 'footstep:personal' owner.username %}">
                 <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">

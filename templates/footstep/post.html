@@ -14,11 +14,11 @@
     </span>
     {% endif %}
 </h1>
-<p class="px-2">
-    {{ post.category }} &nbsp; | &nbsp;
-    {{ post.author }} &nbsp; | &nbsp;
-    {{ post.create_date }}
-    {% if post.modify_date %}&nbsp; | &nbsp; 수정: {{ post.modify_date }}{% endif %}
+<p>
+    <span class="btn btn-sm btn-secondary active">{{ post.category }}</span>
+    <span class="btn btn-sm btn-secondary active">{{ post.author }}</span>
+    <span class="btn btn-sm btn-secondary active">{{ post.create_date }}</span>
+    {% if post.modify_date %}<span class="btn btn-sm btn-secondary active">{{ post.modify_date }} 수정됨</span>{% endif %}
 </p>
 <!-- 내용 ↓ -->
 <div class="card p-3 overflow-auto">
