@@ -1,35 +1,101 @@
 {% extends 'base/main_base.html' %}
+{% load tag_filter %}
 {% block main_content %}
 
-<div class="p-5" style="height: 80vh;">
-    {% include 'errors.html' %}
-    <h1 class="border-bottom border-secondary p-3">
-        내정보
-        <span>
-            <a class="btn btn-primary" href="{% url 'common:profile_modify' %}">프로필 수정</a>
-        </span>
-        <span>
-            <a class="btn btn-primary" href="{% url 'common:password_change' %}" >비밀번호 변경</a>
-        </span>
-        <!-- 회원탈퇴 ↓ -->
-        {% include 'common/modal.html' %} 
-    </h1>
-    <p>{{ user.username }}</p>
-    <p>{{ user.email }}</p>
-
-    {% if user.profile.nickname %}
-    <p>{{ user.profile.nickname }}</p>
-    {% else %}
-    <p>닉네임이 설정되어있지 않습니다</p>
-    {% endif %}
-
-    {% if user.profile.blogname %}
-    <p>{{ user.profile.blogname }}</p>
-    {% else %}
-    <p>블로그 이름이 설정되어있지 않습니다</p>
-    {% endif %}
+<div class="row justify-content-center">
+    <div class="col-10">
+        {% include 'errors.html' %}
+        <h1 class="border-bottom border-secondary p-3">
+            내정보
+            <span>
+                <a class="btn btn-primary" href="{% url 'common:profile_modify' %}">프로필 수정</a>
+            </span>
+            <span>
+                <a class="btn btn-primary" href="{% url 'common:password_change' %}" >비밀번호 변경</a>
+            </span>
+            <!-- 회원탈퇴 ↓ -->
+            {% include 'common/modal.html' %} 
+        </h1>
+        <!-- 회원정보 ↓ -->   
+        <div class="card w-100">
+            <div class="card-body">
+                <p>
+                    <strong>아이디</strong>
+                    <br>{{ user.username }}
+                </p>
+                <p>
+                    <strong>이메일</strong>
+                    <br>{{ user.email }}
+                </p>
+                <p>
+                    <strong>닉네임</strong>
+                    <br>{% if user.profile.nickname %} {{ user.profile.nickname }} {% else %} 닉네임이 설정되어있지 않습니다 {% endif %}
+                </p>            
+                <p>
+                    <strong>블로그 이름</strong>
+                    <br>{% if user.profile.blogname %} {{ user.profile.blogname }} {% else %} 블로그 이름이 설정되어있지 않습니다 {% endif %}
+                </p>
+                <p>
+                    <strong>한줄소개</strong>
+                    <br>{% if user.profile.introduce %} {{ user.profile.introduce }} {% else %} 한줄소개가 없습니다 {% endif %}
+                </p>
+            </div>
+        </div>
+        <hr>
+        <!-- 최근 작성한 게시글 ↓ -->
+        <div class="card w-100">
+            <h5 class="pt-3 px-3">최근 작성한 게시글</h5>
+            <div class="card-body">
+                {% if posts_create %}
+                <div class="row text-center px-4">
+                    <strong class="col-2">카테고리</strong>
+                    <strong class="col-7">제목</strong>
+                    <strong class="col-3">작성일자</strong>
+                </div>
+                <hr>
+                <ul class="text-center list-group">
+                    {% for post in posts_create %}
+                    <a href="#" class="text-decoration-none">
+                        <li class="list-group-item">
+                            <div class="row">
+                                <small class="col-2 align-self-center">{{ post.category }}</small>
+                                <small class="col-7 align-self-center">{{ post.subject }}</small>
+                                <small class="col-3">{{ post.create_date }}</small>
+                            </div>
+                        </li>
+                    </a>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-center">작성한 게시글이 없습니다</p>
+                {% endif %}
+            </div>
+        </div>
+        <hr>
+        <!-- 최근 작성한 댓글 ↓ -->
+        <div class="card w-100">
+            <h5 class="p-3 border-bottom">최근 작성한 댓글</h5>
+            <div class="card-body">
+                {% if comments_create %}
+                <ul class="text-center list-group">
+                    {% for comment in comments_create %}
+                    <a href="#" class="text-decoration-none">
+                        <li class="list-group-item">
+                            <div class="row">
+                                <small class="col-8 text-truncate align-self-center">{{ comment.content }}</small>
+                                <small class="col-4">{{ comment.create_date }}</small>
+                            </div>
+                        </li>
+                    </a>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-center">작성한 댓글이 없습니다</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
-<hr>
-<small class="d-block text-center text-secondary">(C)2023.Footstep All rights reserved.</small>
+<small class="d-block text-center text-secondary py-3">(C)2023.Footstep All rights reserved.</small>
 
 {% endblock %}

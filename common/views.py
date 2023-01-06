@@ -26,7 +26,11 @@ def signup(request):
 
 @login_required(login_url='common:login')
 def profile(request):
-    return render(request, 'common/profile.html')
+    user = request.user
+    posts_create = user.author_post.order_by('-create_date')[:5]
+    comments_create = user.author_comment.order_by('-create_date')[:7]
+    context = {'posts_create':posts_create, 'comments_create':comments_create}
+    return render(request, 'common/profile.html', context)
 
 
 @login_required(login_url='common:login')

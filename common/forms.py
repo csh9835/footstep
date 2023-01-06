@@ -27,8 +27,9 @@ class CustomUserChangeForm(UserChangeForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('nickname', 'blogname')
+        fields = ('nickname', 'blogname', 'introduce')
         labels = {
             'nickname': '닉네임',
             'blogname': '블로그 이름',
+            'introduce': '한줄소개',
         }

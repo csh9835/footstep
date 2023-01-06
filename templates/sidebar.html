@@ -13,6 +13,11 @@
                     </h3>
                 </a>
             </li>
+            {% if owner.profile.introduce %}
+            <li class="nav-item">
+                <p class="text-center text-break text-white">{{ owner.profile.introduce }}</p>
+            </li>
+            {% endif %}
             <li class="nav-item m-1 p-1 border-bottom">
                 <div class="nav-item text-white">
                     {% if owner.profile.nickname %}
