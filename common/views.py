@@ -6,7 +6,6 @@ from django.contrib import messages
 
 from .forms import UserForm,CustomUserChangeForm ,ProfileForm, User
 from .models import Profile
-from footstep.views import img_check, img_delete
 
 
 def signup(request):
@@ -81,11 +80,6 @@ def profile_delete(request):
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user:
-            img = []
-            for post in request.user.author_post.all():
-                img.extend(img_check(post.content))
-            if img:
-                img_delete(img, [])
             user.delete()
             logout(request)
             return redirect('footstep:index')
