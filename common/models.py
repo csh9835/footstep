@@ -6,3 +6,4 @@ class Profile(models.Model):
     nickname = models.CharField(max_length=20, blank=True, null=True)
     blogname = models.CharField(max_length=50, blank=True, null=True)
     introduce = models.CharField(max_length=50, blank=True, null=True)
+    profile_img = models.ImageField(upload_to='profile_img/', blank=True, null=True)
