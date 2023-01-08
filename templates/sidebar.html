@@ -18,15 +18,20 @@
                 <p class="text-center text-break text-white">{{ owner.profile.introduce }}</p>
             </li>
             {% endif %}
+            {% if owner.profile.profile_img %}
+            <li class="nav-item text-center">
+                <img src="{{ owner.profile.profile_img.url }}" alt="No image" style="width: 100px; height: 100px;" class="rounded-circle">
+            </li>
+            {% endif %}
             <li class="nav-item m-1 p-1 border-bottom">
-                <div class="nav-item text-white">
+                <div class="nav-item text-center text-white">
                     {% if owner.profile.nickname %}
                     {{ owner.profile.nickname }}
                     {% else %}
                     {{ owner.username }}
                     {% endif %}
                 </div>
-                <div class="nav-item text-white">{{ owner.email }}</div>
+                <div class="nav-item text-white text-center">{{ owner.email }}</div>
             </li>
             {% if owner.username == user.username %}
             <!-- 글쓰기 ↓ -->

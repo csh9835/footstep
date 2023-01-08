@@ -6,6 +6,7 @@ from django.contrib import messages
 
 from .forms import UserForm,CustomUserChangeForm ,ProfileForm, User
 from .models import Profile
+import os
 
 
 def signup(request):
@@ -38,14 +39,23 @@ def profile_modify(request):
     user = get_object_or_404(User, username=request.user.username)
     p = Profile.objects.filter(user=request.user)
     if request.method == 'POST':
+        try:
+            before_img = user.profile.profile_img
+        except:
+            before_img = None
         form = CustomUserChangeForm(request.POST, instance=request.user)
         if p:
-            pform = ProfileForm(request.POST, instance=user.profile)
+            pform = ProfileForm(request.POST, request.FILES, instance=user.profile)
         else:
-            pform = ProfileForm(request.POST)
-        if form.is_valid():
+            pform = ProfileForm(request.POST, request.FILES)
+        if form.is_valid() and pform.is_valid():
             form.save()
             pro = pform.save(commit=False)
+            if 'cb' in request.POST:
+                os.remove(pro.profile_img.path)
+                pro.profile_img.delete()
+            elif before_img and before_img != pro.profile_img:
+                os.remove(before_img.path)
             pro.user = request.user
             pro.save()
             return redirect('common:profile')
@@ -80,8 +90,12 @@ def profile_delete(request):
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user:
+            try:
+                os.remove(user.profile.profile_img.path)
+            except:
+                pass
             user.delete()
             logout(request)
             return redirect('footstep:index')
-    messages.error(request, '요청을 실패했습니다')
+    messages.error(request, '잘못된 요청입니다')
     return render(request, 'common/profile.html')

@@ -39,6 +39,12 @@
                     <strong>한줄소개</strong>
                     <br>{% if user.profile.introduce %} {{ user.profile.introduce }} {% else %} 한줄소개가 없습니다 {% endif %}
                 </p>
+                <p>
+                    <strong>프로필 사진</strong><br>
+                    {% if user.profile.profile_img %}
+                        <img src="{{ user.profile.profile_img.url }}" alt="No image" style="width: 250px; height: 250px;">
+                    {% else %} 프로필 사진이 없습니다 {% endif %}
+                </p>
             </div>
         </div>
         <hr>
