@@ -61,12 +61,12 @@
                 <hr>
                 <ul class="text-center list-group">
                     {% for post in posts_create %}
-                    <a href="#" class="text-decoration-none">
+                    <a href="{% url 'footstep:post' user.username post.subject %}" class="text-decoration-none">
                         <li class="list-group-item">
                             <div class="row">
-                                <small class="col-2 align-self-center">{{ post.category }}</small>
-                                <small class="col-7 align-self-center">{{ post.subject }}</small>
-                                <small class="col-3">{{ post.create_date }}</small>
+                                <small class="col-2 align-self-center text-center">{{ post.category }}</small>
+                                <small class="col-6 align-self-center border-start border-end">{{ post.subject }}</small>
+                                <small class="col-4 text-center">{{ post.create_date }}</small>
                             </div>
                         </li>
                     </a>
@@ -83,13 +83,13 @@
             <h5 class="p-3 border-bottom">최근 작성한 댓글</h5>
             <div class="card-body">
                 {% if comments_create %}
-                <ul class="text-center list-group">
+                <ul class="list-group">
                     {% for comment in comments_create %}
-                    <a href="#" class="text-decoration-none">
+                    <a href="{% url 'footstep:post' comment.post.author comment.post.subject %}" class="text-decoration-none">
                         <li class="list-group-item">
                             <div class="row">
                                 <small class="col-8 text-truncate align-self-center">{{ comment.content }}</small>
-                                <small class="col-4">{{ comment.create_date }}</small>
+                                <small class="col-4 text-center border-start">{{ comment.create_date }}</small>
                             </div>
                         </li>
                     </a>
