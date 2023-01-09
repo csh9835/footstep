@@ -55,7 +55,7 @@
             <!-- 카테고리 ↓ -->
             {% if owner.sidebarcontent_set.all %}
                 {% for i in owner.sidebarcontent_set.all %}
-                <a class="nav-link text-white" href="{% url 'footstep:category' owner.username i.category_sub %}">
+                <a class="nav-link text-white text-break" href="{% url 'footstep:category' owner.username i.category_sub %}">
                     {{ i }} ({{ i.post_set.count }})
                 </a>
                 {% endfor %}

@@ -29,7 +29,15 @@
                class="form-control" 
                name="category" 
                id="category"
-               value="{{ form.category.value|default_if_none:'' }}">
+               value="{{ form.category.value|default_if_none:'' }}"
+               list="list_options">
+        {% if owner.sidebarcontent_set.all %}
+        <datalist id="list_options" class="overflow-auto">
+            {% for item in owner.sidebarcontent_set.all %}
+            <option value="{{ item }}">
+            {% endfor %}
+        </datalist>
+        {% endif %}
     </div>
     <div class="mb-3">
         <label for="content" class="form-label">내용</label>
