@@ -142,3 +142,11 @@ SUMMERNOTE_CONFIG = {
     },
     'attachment_filesize_limit': 2560 * 1440 * 2 #이미지 용량제한
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_FORT = '587'
+EMAIL_HOST = 'smtp.naver.com'
+EMAIL_HOST_USER = my_settings.email_id
+EMAIL_HOST_PASSWORD = my_settings.email_password
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
