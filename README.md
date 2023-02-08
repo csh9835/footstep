@@ -9,5 +9,7 @@
 * Bootstrap 5.1.3
 * Summernote WISIWYG editor
 * MySQL
+* Gunicorn
+* Nginx
 * Oracle Cloud Infrastructure(OCI)  
   - OS: Canonical-Ubuntu-22.04
