@@ -18,15 +18,20 @@
     {% include 'sidebar.html' %}
 
     <main class="col-md-8 ms-sm-auto col-lg-9 px-md-4">
-        <div class="p-2 h-100 text-break">    
+        <div class="p-2 text-break d-flex flex-column min-vh-100">
             <!-- 개인 컨텐츠 ↓ -->
             {% block personal_content %}
             {% endblock %}
             <form id="getForm" method="get">
                 <input type="hidden" id="getpage" name="page" value="{{ page }}">
             </form>
-            <hr>
-            <small class="text-secondary">(C)2023.Footstep All rights reserved.</small>
+            <footer class="mt-auto">
+                <hr>
+                <small class="text-secondary">
+                    (C)2023.Footstep All rights reserved. | 
+                    <strong><a href="{% url 'common:privacy_policy' %}" class="text-decoration-none">개인정보취급방침</a></strong>
+                </small>
+            </footer>
         </div>
     </main>
 </div>
