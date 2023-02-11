@@ -1,7 +1,7 @@
 {% extends 'base/main_base.html' %}
 {% load tag_filter %}
 {% block main_content %}
-<div class="container py-5">
+<div class="container py-5 d-flex flex-column min-vh-100">
     <!-- 검색 폼 ↓ -->
     <div class="row justify-content-center">
         <div class="col-9">
@@ -62,9 +62,14 @@
         <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
         <input type="hidden" id="page" name="page" value="{{ page }}">
     </form>
+    <footer class="mt-auto">
+        <hr>
+        <small class="d-block text-center text-secondary">
+            (C)2023.Footstep All rights reserved. | 
+            <strong><a href="{% url 'common:privacy_policy' %}" class="text-decoration-none">개인정보취급방침</a></strong>
+        </small>
+    </footer>
 </div>
-<hr>
-<small class="d-block text-center text-secondary">(C)2023.Footstep All rights reserved.</small>
 
 {% endblock %}
 

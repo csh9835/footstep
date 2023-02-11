@@ -9,6 +9,10 @@ from .models import Profile
 import os
 
 
+def privacy_policy(request):
+    return render(request, 'common/privacy_policy.html')
+
+
 def signup(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
