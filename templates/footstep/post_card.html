@@ -6,7 +6,7 @@
                 <img src="{{ img }}" alt="No img" class="rounded-start border-bottom border-end border-1" style="width: 100%; height: 199px; object-fit: cover;">
             </div>
             {% endif %}
-            <div class="col" style="height: 200px;">
+            <div class="{% if img %}col-8{% else %}col{% endif %}" style="height: 200px;">
                 <div class="card-body text-dark pb-1">
                     <h5 class="card-title fw-bold text-truncate">{{ post.subject }}</h5>
                     <div class="card-text imgtext">{{ post.subtitle }}</div>
