@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.conf import settings
+from django_summernote.models import Attachment
 import re, os
 
 from .models import User, Post, Comment
@@ -20,6 +21,9 @@ def img_check(path):
 def img_delete(b_list, a_list):
     for item in b_list:
         if item not in a_list:
+            a = Attachment.objects.filter(file='django-summernote/'+item)
+            if a:
+                a.delete()
             p = settings.MEDIA_ROOT+'django-summernote/'
             os.remove(p + item)
             try: #빈 디렉토리 삭제
