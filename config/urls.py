@@ -21,7 +21,7 @@ from django.conf import settings
 from footstep import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin20230204/', admin.site.urls),
     path('footstep/', include('footstep.urls')),
     path('', views.index, name='index'),
     path('common/', include('common.urls')),

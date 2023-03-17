@@ -135,14 +135,20 @@ def post(request, username, subject):
     return render(request, 'footstep/post.html', context)
 
 
+junk = []
 @login_required(login_url='common:login')
 def post_create(request, username):
+    global junk
     owner = get_object_or_404(User, username=username)
+    if request.user != owner: #비정상 루트로 수행시
+        messages.error(request, '수정권한이 없습니다')
+        return redirect('footstep:post_create', username=request.user)
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
             post = Post()
             if post.subject != form.cleaned_data['subject'] and owner.author_post.filter(subject=form.cleaned_data['subject']): #게시글 제목 중복방지
+                junk += img_check(request.POST['content'])
                 messages.error(request, '동일한 제목의 게시글이 있습니다')
             else:
                 post.subject = form.cleaned_data['subject']
@@ -155,6 +161,9 @@ def post_create(request, username):
                     post.category = owner.sidebarcontent_set.create(category_sub=form.cleaned_data['category'])
                 post.create_date = timezone.now()
                 post.save()
+                if junk: #에러로 인해 db에는 반영되지 않았지만 media파일엔 남은경우 삭제
+                    img_delete(junk, img_check(post.content))
+                    junk = []
                 return redirect('footstep:personal', username = username)
     else:
         form = PostForm()
@@ -162,7 +171,6 @@ def post_create(request, username):
     return render(request, 'footstep/post_form.html', context)
 
 
-junk = []
 @login_required(login_url='common:login')
 def post_modify(request, username, subject):
     global junk
@@ -193,7 +201,6 @@ def post_modify(request, username, subject):
                 if img_path: #변동으로 인해 필요없어진 이미지파일 제거
                     img_delete(img_path, img_check(post.content))
                 if junk: #에러로 인해 db에는 반영되지 않았지만 media파일엔 남은경우 삭제
-                    print(junk)
                     img_delete(junk, img_check(post.content))
                     junk = []
                 return redirect('footstep:post', username=username, subject=post.subject)
