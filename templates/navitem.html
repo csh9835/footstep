@@ -4,7 +4,7 @@
             {% if user.is_authenticated %} <!-- 1 -->
             <a class="nav-link btn btn-dark px-3" href="{% url 'common:logout' %}">로그아웃</a>
             {% if user.is_superuser %} <!-- 2  -->
-            <a class="nav-link btn btn-dark px-3" href="/admin">관리자페이지 ({{ user.username }})</a>
+            <a class="nav-link btn btn-dark px-3" href="/admin20230204">관리자페이지 ({{ user.username }})</a>
             {% else %} <!-- 2 -->
             <a class="nav-link btn btn-dark px-3" href="{% url 'common:profile' %}">내정보 ({{ user.username }})</a>
             {% endif %} <!-- 2 -->
